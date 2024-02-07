@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cloudinary = require('cloudinary').v2;
 const multer  = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'tmp/' });
 const fs = require('fs');
 const crypto = require('crypto');
 
