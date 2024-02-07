@@ -1,0 +1,15 @@
+# API Folder:
+api/node_modules
+api/package-lock.json
+api/.env
+
+# App Folder:
+app/node_modules
+app/babel.config.js
+app/package-lock.json
+app/assets/defaults
+app/eas.json
+app/.expo
+
+# Main Folder:
+QuikSnap.code-workspace
