@@ -12,7 +12,7 @@ export default function App() {
   const [page, setPage] = useState("start");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const apiUrl = "http://192.168.1.193:5000/";
+  const apiUrl = "https://quiksnap-api.vercel.app/";
 
   useEffect(() => {
     console.log("Rendered");

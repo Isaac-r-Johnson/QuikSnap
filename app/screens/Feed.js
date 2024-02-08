@@ -70,8 +70,8 @@ export default Feed = (props) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
     });
+    getLocation();
     if (!result.canceled){
-      getLocation();
       setPostImage(result.assets[0]);
 
       setAddPost(true);

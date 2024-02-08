@@ -2,6 +2,7 @@
 api/node_modules
 api/package-lock.json
 api/.env
+api/.vercel
 
 # App Folder:
 app/node_modules

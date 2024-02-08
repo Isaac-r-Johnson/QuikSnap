@@ -6,7 +6,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cloudinary = require('cloudinary').v2;
 const multer  = require('multer');
-const upload = multer({ dest: 'tmp/' });
+// const upload = multer({dest: './tmp'});
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const fs = require('fs');
 const crypto = require('crypto');
 
@@ -50,15 +52,23 @@ const Post = new mongoose.model('Post', postSchema);
 
 
 // Functions
-const uploadImage = async (imgUrl) => {
-    try{
-        const data = await cloudinary.uploader.upload(imgUrl, { folder: "QuikSnap" });
-        return data.secure_url;
-    } catch (err){
-        console.log(err);
-        throw err;
+const uploadImage = async (fileBuffer) => {
+    try {
+        return new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream({ folder: "QuikSnap" }, (error, result) => {
+                if (error) {
+                    console.error('Error uploading image to Cloudinary:', error);
+                    reject(error);
+                } else {
+                    resolve(result.secure_url);
+                }
+            }).end(fileBuffer);
+        });
+    } catch (error) {
+        console.error('Error in uploadImage:', error);
+        throw error;
     }
-}
+};
 
 
 // Get Requests
@@ -85,10 +95,12 @@ app.get('/posts', async (req, res) => {
 // Post Requests
 app.post('/signup', upload.single('pic'), async (req, res) => {
     try {
-        const picUrl = await uploadImage(req.file.path);
+        if (!req.file) {
+            console.log("No File!");
+        }
+        const picUrl = await uploadImage(req.file.buffer);
         const {username, password} = req.body;
         const key = crypto.randomBytes(20).toString('base64');
-        fs.unlinkSync(req.file.path);
 
         User.insertMany([{
             username: username,
@@ -124,8 +136,7 @@ app.post('/login', async (req, res) => {
 
 app.post('/post', upload.single('postImage'), async (req, res) => {
     try {
-        const picUrl = await uploadImage(req.file.path);
-        fs.unlinkSync(req.file.path);
+        const picUrl = await uploadImage(req.file.buffer);
         const {postTitle, postDes, username, password, location} = req.body;
         const key = crypto.randomBytes(20).toString('base64');
         const user = await User.findOne({username: username, password: password});
