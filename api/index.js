@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cloudinary = require('cloudinary').v2;
 const multer  = require('multer');
-// const upload = multer({dest: './tmp'});
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const fs = require('fs');
