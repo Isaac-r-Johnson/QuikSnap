@@ -50,6 +50,9 @@ export default Signup = (props) => {
             }
           }, {timeout: 3000});
           if (res.data === "OK"){
+            AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
+            AsyncStorage.setItem('storedUsername', username);
+            AsyncStorage.setItem('storedPassword', password);
             loadFeed(username, password);
           }
           else {

@@ -5,6 +5,8 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Popup from '../components/Popup';
 import BackBtn from '../components/BackBtn';
+import Loading from '../components/Loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default Login = (props) => {
   const {loadPage, loadFeed, apiUrl} = props;
@@ -26,6 +28,9 @@ export default Login = (props) => {
       try {
         const res = await axios.post(apiUrl + 'login/', {username: username, password: password}, {timeout: 3000});
         if (res.data === "OK"){
+          AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
+          AsyncStorage.setItem('storedUsername', username);
+          AsyncStorage.setItem('storedPassword', password);
           loadFeed(username, password);
         }
         else if (res.data === "NO"){

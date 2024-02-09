@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import Post from '../components/Post';
 import Popup from '../components/Popup';
 import * as Location from 'expo-location';
+import Loading from '../components/Loading';
 
 export default Feed = (props) => {
   const {username, password, apiUrl, loadFeed} = props;
@@ -20,6 +21,7 @@ export default Feed = (props) => {
   const [postDes, setPostDes] = useState("");
   const [posts, setPosts] = useState(null);
   const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPosts();
@@ -73,7 +75,6 @@ export default Feed = (props) => {
     getLocation();
     if (!result.canceled){
       setPostImage(result.assets[0]);
-
       setAddPost(true);
     }
   }
@@ -106,12 +107,12 @@ export default Feed = (props) => {
           }
           else if (res.data === "ERROR"){
             console.log("Server Error!");
-            error(true);
+            setError(true);
 
           }
         } catch (err){
-          console.log(err.message)
-          error(true);
+          console.log("You: " + err.message);
+          setError(true);
         }
     }else{
       setNotFilled(true);
@@ -136,74 +137,81 @@ export default Feed = (props) => {
     if (posts.data !== "ERROR"){
       if (posts.data.length <= 0){
         setPosts(null);
+        setLoading(false);
       }
       else{
         setPosts(posts.data.reverse());
+        setLoading(false);
       }
     }
     else{
-      console.log("ERROR");
+      console.log("Cannot Get Posts");
       setPosts(null);
+      setLoading(false);
     }
   }
-
-  return (
-    <>
-    <StatusBar style='light'/>
-    <View style={styles.feedContainer}>
-        <Header type={'feed'} addPostFun={createPost}/>
-
-
-        <Modal animationType='slide' transparent={false} visible={addPost}>
-          <View style={styles.addPostModal}>
-          <View style={styles.backBtn}>
-            <Pressable onPress={cancelPost}>
-              <Text style={styles.backBtnArrow}>➜</Text>
-            </Pressable>
-          </View>
-            <View style={styles.postView}>
-              <Image style={styles.postImage} source={{ uri: postImage.uri }}/>
-              <View style={styles.postForm}>
-                <TextInput style={styles.postTitle} onChangeText={updateTitle} value={postTitle} placeholder='Title'/>
-                <TextInput multiline={true} numberOfLines={5} style={styles.postDes} onChangeText={updateDes} value={postDes} placeholder='Description'/>
-                <View style={styles.postBtn}>
-                  <Pressable android_ripple={{color: '#012657'}} onPress={post}>
-                    <Text style={styles.postBtnText}>Post</Text>
-                  </Pressable>
+  if (!loading){
+    return (
+      <>
+      <StatusBar style='light'/>
+      <View style={styles.feedContainer}>
+          <Header type={'feed'} addPostFun={createPost}/>
+  
+  
+          <Modal animationType='slide' transparent={false} visible={addPost}>
+            <View style={styles.addPostModal}>
+            <View style={styles.backBtn}>
+              <Pressable onPress={cancelPost}>
+                <Text style={styles.backBtnArrow}>➜</Text>
+              </Pressable>
+            </View>
+              <View style={styles.postView}>
+                <Image style={styles.postImage} source={{ uri: postImage.uri }}/>
+                <View style={styles.postForm}>
+                  <TextInput style={styles.postTitle} onChangeText={updateTitle} value={postTitle} placeholder='Title'/>
+                  <TextInput multiline={true} numberOfLines={5} style={styles.postDes} onChangeText={updateDes} value={postDes} placeholder='Description'/>
+                  <View style={styles.postBtn}>
+                    <Pressable android_ripple={{color: '#012657'}} onPress={post}>
+                      <Text style={styles.postBtnText}>Post</Text>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
             </View>
+          </Modal>
+  
+          <Popup
+            modalVisible={notFilled}
+            setModalVisible={setNotFilled}
+            popupMessage="Complete All Fields!"
+            btnText="Close"
+          />
+  
+          <Popup
+            modalVisible={error}
+            setModalVisible={setError}
+            popupMessage="An Error has Occurred. Sorry!"
+            btnText="OK"
+          />
+  
+  
+          <View style={styles.feedScreen}>
+            {posts !== null ? (
+              <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
+                return <Post posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
+              }}/>
+            ):(
+              <Text style={styles.errorText}>Loading Posts...</Text>
+            )}
           </View>
-        </Modal>
-
-        <Popup
-          modalVisible={notFilled}
-          setModalVisible={setNotFilled}
-          popupMessage="Complete All Fields!"
-          btnText="Close"
-        />
-
-        <Popup
-          modalVisible={error}
-          setModalVisible={setError}
-          popupMessage="An Error has Occurred. Sorry!"
-          btnText="OK"
-        />
-
-
-        <View style={styles.feedScreen}>
-          {posts !== null ? (
-            <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
-              return <Post posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
-            }}/>
-          ):(
-            <Text style={styles.errorText}>Error: Cannot Get Posts!</Text>
-          )}
-        </View>
-
-    </View>
-    </>
-  );
+  
+      </View>
+      </>
+    );
+  }
+  else if (loading){
+    return (<Loading/>);
+  }
 }
 
 // Styling:
@@ -339,7 +347,7 @@ const styles = StyleSheet.create({
   // Error Text:
   errorText: {
     marginTop: 20,
-    fontSize: 33,
+    fontSize: 23,
     fontWeight: '800'
   }
 
