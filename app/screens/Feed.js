@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Modal, Image, TextInput, Pressable, Keyboard, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, Modal, TextInput, Pressable } from 'react-native';
 import { useState, useEffect } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import Post from '../components/Post';
 import Popup from '../components/Popup';
 import * as Location from 'expo-location';
 import Loading from '../components/Loading';
+import Friend from '../components/Friend';
 
 export default Feed = (props) => {
   const {username, password, apiUrl, loadFeed} = props;
@@ -22,6 +23,10 @@ export default Feed = (props) => {
   const [posts, setPosts] = useState(null);
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showSocial, setShowSocial] = useState(true);
+  const [socialSearch, setSocialSearch] = useState("");
+
+  var tempData = [1, 2, 3]
 
   useEffect(() => {
     getPosts();
@@ -66,7 +71,6 @@ export default Feed = (props) => {
       return null;
     }
   }
-
   const createPost = async () => {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -124,12 +128,14 @@ export default Feed = (props) => {
     setPostTitle("");
     setPostDes("");
   }
-
   const updateTitle = (title) => {
     setPostTitle(title);
   }
   const updateDes = (des) => {
     setPostDes(des);
+  }
+  const updateSocialSearch = (search) => {
+    setSocialSearch(search);
   }
 
   const getPosts = async () => {
@@ -152,10 +158,26 @@ export default Feed = (props) => {
   }
   if (!loading){
     return (
-      <>
-      <StatusBar style='light'/>
+      // <>
+      // <StatusBar style='light'/>
       <View style={styles.feedContainer}>
-          <Header type={'feed'} addPostFun={createPost}/>
+          <Header type={'feed'} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
+
+          <Modal animationType='slide' transparent={false} visible={showSocial}>
+            <View style={styles.mainContainer}>
+              <Header type={'contact'} closeFun={() => setShowSocial(false)}/>
+              <View style={styles.socialContentContainer}>
+                <TextInput style={styles.socialSearch} placeholder='Search Friends' onChangeText={updateSocialSearch} value={socialSearch}/>
+                <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={tempData} renderItem={temp => {
+                  return <Friend img="https://res.cloudinary.com/dqaxkucbu/image/upload/v1707364657/QuikSnap/yusjllmou8bpvxvlunbc.jpg" name="Isaac Johnson"/>
+                }}>
+                  
+                </FlatList>
+              </View>
+
+
+            </View>
+          </Modal>
   
   
           <Modal animationType='slide' transparent={false} visible={addPost}>
@@ -206,7 +228,7 @@ export default Feed = (props) => {
           </View>
   
       </View>
-      </>
+      // </>
     );
   }
   else if (loading){
@@ -235,6 +257,30 @@ const styles = StyleSheet.create({
     backBtnArrow: {
       transform: [{ rotate: '180deg'}],
       fontSize: 25,
+    },
+
+    // View Contacts Modal:
+    mainContainer: {
+      height: '100%',
+      width: '100%',
+      backgroundColor: '#004AAD',
+    },
+    socialContentContainer: {
+      width: '100%',
+      height: '100%',
+      marginVertical: 15,
+      display: 'flex',
+      alignItems: 'center'
+    },
+    socialSearch: {
+      width: '90%',
+      paddingLeft: 5,
+      marginBottom: 10,
+      borderColor: 'black',
+      borderWidth: 1,
+      borderRadius: 6,
+      color: 'black',
+      fontSize: 20
     },
 
     // Add Post

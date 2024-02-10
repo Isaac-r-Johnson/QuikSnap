@@ -6,12 +6,31 @@ export default Header = (props) => {
             <View style={styles.overlay}>
                 <View style={styles.header2}>
                     <View style={styles.left}>
+                        <Pressable onPress={props.openFun}>
+                            <Image style={styles.headerImage} source={require('../assets/logo.png')} />
+                        </Pressable>
+                        <Text style={styles.headerText}>QuikSnap</Text>
+                    </View>
+                    <View style={styles.postBtnView}>
+                        <Pressable onPress={props.addPostFun}>
+                            <Image style={styles.postBtnImage} source={require("../assets/postBtn.png")}/>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+    else if (props.type === 'contact'){
+        return (
+            <View style={styles.overlay}>
+                <View style={styles.header2}>
+                    <View style={styles.left}>
                         <Image style={styles.headerImage} source={require('../assets/logo.png')} />
                         <Text style={styles.headerText}>QuikSnap</Text>
                     </View>
                     <View style={styles.postBtnView}>
-                        <Pressable android_ripple={{color: '#012657'}} onPress={props.addPostFun}>
-                            <Image style={styles.postBtnImage} source={require("../assets/postBtn.png")}/>
+                        <Pressable onPress={props.closeFun}>
+                            <Image style={styles.closeBtnImage} source={require("../assets/closeBtn.png")}/>
                         </Pressable>
                     </View>
                 </View>
@@ -66,6 +85,11 @@ const styles = StyleSheet.create({
     headerImage: {
         width: 40,
         height: 40,
+        marginHorizontal: 10
+    },
+    closeBtnImage: {
+        width: 35,
+        height: 35,
         marginHorizontal: 10
     },
     postBtnView: {

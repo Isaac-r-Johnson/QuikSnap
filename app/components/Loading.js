@@ -28,23 +28,23 @@ export default Loading = () => {
 }
 
 const styles = StyleSheet.create({
-    main: {
-        width: "100%",
-        height: "100%",
-        backgroundColor: '#e8e8e8',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    loading: {
-        borderColor: 'white',
-        backgroundColor: '#004AAD',
-        width: 75,
-        height: 75,
-        borderRadius: 100,
-        borderWidth: 5,
-        borderBottomRightRadius: 10,
-        elevation: 20
-    },
+  main: {
+      width: "100%",
+      height: "100%",
+      backgroundColor: '#e8e8e8',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+  },
+  loading: {
+      borderColor: 'white',
+      backgroundColor: '#004AAD',
+      width: 50,
+      height: 50,
+      borderRadius: 100,
+      borderWidth: 5,
+      borderBottomRightRadius: 10,
+      elevation: 20
+  },
 
 });

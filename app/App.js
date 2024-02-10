@@ -20,14 +20,15 @@ export default function App() {
 
   useEffect(() => {
     console.log("Rendered");
-    setLoading(true);
-    setTimeout(() => { 
-          setLoading(false); 
-      }, 500);
+    // setLoading(true);
+    // setTimeout(() => { 
+    //       setLoading(false); 
+    //   }, 500);
   }, [page]);
 
   useEffect(() => {
     checkIfLoggedIn();
+    // clearStorage();
   }, []);
 
   const checkIfLoggedIn = async () => {
