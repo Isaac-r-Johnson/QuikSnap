@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Pressable, Button, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
@@ -15,6 +16,7 @@ export default Signup = (props) => {
   const [pic, setPic] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState(false);
+  const [taken, setTaken] = useState(false);
 
   const updateUsernameField = (value) => {
     setUsername(value)
@@ -55,12 +57,15 @@ export default Signup = (props) => {
             AsyncStorage.setItem('storedPassword', password);
             loadFeed(username, password);
           }
+          else if (res.data === "TAKEN"){
+            setTaken(true);
+          }
           else {
             setError(true);
           }
         } catch (err){
           setError(true);
-          console.log(err.message);
+          console.log(err);
         }
     }
     else{
@@ -87,6 +92,13 @@ export default Signup = (props) => {
         modalVisible={error}
         setModalVisible={setError}
         popupMessage="An Error has Occurred. Sorry!"
+        btnText="OK"
+      />
+
+      <Popup 
+        modalVisible={taken} 
+        setModalVisible={setTaken}
+        popupMessage="That Username is Already Taken." 
         btnText="OK"
       />
 

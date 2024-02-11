@@ -1,20 +1,55 @@
 import { StyleSheet, View, Image, Text, Pressable} from 'react-native';
+import { useState, useEffect } from 'react';
 
 export default Friend = (props) => {
-    const {name, img, followFun} = props;
-    return (
-        <View style={styles.friendContainer}>
-            <View style={styles.contentContainer}>
-                <Image style={styles.profileImag} source={{uri:img}}/>
-                <Text style={styles.name}>{name}</Text>
+    const {an, follows, name, img, unFollowFun, followFun} = props;
+    const [following, setFollowing] = useState(null);
+    const [clicked, setClicked] = useState(false);
+
+    useEffect(() => {
+        if (follows){
+            follows.forEach(follow => {
+                if (follow === name && !clicked){
+                    setFollowing(true);
+                }
+            });
+        }
+        if (following === null){
+            setFollowing(false);
+        }
+        if (clicked){
+            setClicked(false);
+        }
+    }, [following])
+
+    if (an === name){
+        null
+    }
+    else {
+        return (
+            <View style={styles.friendContainer}>
+                <View style={styles.contentContainer}>
+                    <Image style={styles.profileImag} source={{uri:img}}/>
+                    <Text style={styles.name}>{name}</Text>
+                </View>
+                <View style={styles.btnContainer}>
+                    {following ? (
+                        <View style={styles.unFollowBtn}>
+                            <Pressable onPress={() => {unFollowFun(name); setFollowing(false); setClicked(true)}} android_ripple={{color: '#004AAD'}}>
+                                <Text style={styles.unFollowBtnText}>Unfollow</Text>
+                            </Pressable>
+                        </View>
+                    ):(
+                        <View style={styles.followBtn}>
+                            <Pressable onPress={() => {followFun(name); setFollowing(true)}} android_ripple={{color: '#004AAD'}}>
+                                <Text style={styles.followBtnText}>Follow</Text>
+                            </Pressable>
+                        </View>
+                    )}
+                </View>
             </View>
-            <View style={styles.followBtn}>
-                <Pressable onPress={() => followFun(name)}>
-                    <Text style={styles.followBtnText}>Follow</Text>
-                </Pressable>
-            </View>
-        </View>
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -43,6 +78,12 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: 'black'
     },
+    btnContainer: {
+        width: 71,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
     followBtn: {
         width: 60,
         height: 30,
@@ -55,6 +96,25 @@ const styles = StyleSheet.create({
     },
     followBtnText: {
         color: '#E8E8E8',
-        fontWeight: '500'
+        fontWeight: '500',
+        paddingHorizontal: 9,
+        paddingVertical: 5
+    },
+    unFollowBtn: {
+        width: 71,
+        height: 30,
+        backgroundColor: '#E8E8E8',
+        borderRadius: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 10
+    },
+    unFollowBtnText: {
+        color: '#012657',
+        fontWeight: '500',
+        borderRadius: 10,
+        paddingHorizontal: 7,
+        paddingVertical: 5
     }
 });

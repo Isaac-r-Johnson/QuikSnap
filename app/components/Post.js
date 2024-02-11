@@ -27,7 +27,8 @@ export default Post = (props) => {
 const styles = StyleSheet.create({
     post: {
         marginTop: 10,
-        height: 600,
+        paddingBottom: 15,
+        height: 'fit-content',
         width: 375,
         backgroundColor: 'white',
         alignItems: 'center',

@@ -12,8 +12,7 @@ import Loading from '../components/Loading';
 import Friend from '../components/Friend';
 
 export default Feed = (props) => {
-  const {username, password, apiUrl, loadFeed} = props;
-
+  const {username, password, apiUrl, logoutFun, loadFeed} = props;
   const [postImage, setPostImage] = useState("");
   const [addPost, setAddPost] = useState(false);
   const [notFilled, setNotFilled] = useState(false);
@@ -23,15 +22,28 @@ export default Feed = (props) => {
   const [posts, setPosts] = useState(null);
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(true);
-  const [showSocial, setShowSocial] = useState(true);
+  const [showSocial, setShowSocial] = useState(false);
   const [socialSearch, setSocialSearch] = useState("");
-
-  var tempData = [1, 2, 3]
+  const [users, setUsers] = useState([]);
+  const [follows, setFollows] = useState([]);
 
   useEffect(() => {
     getPosts();
     console.log("Feed Update");
-  }, [addPost])
+  }, [addPost]);
+
+  useEffect(() => {
+    if (!showSocial){
+      getPosts();
+      console.log("Feed Update");
+    }
+    else{
+      axios.get(apiUrl + 'users/')
+      .then(res => {
+        setUsers(res.data);
+      });
+    }
+  }, [showSocial]);
 
   const getLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -137,9 +149,35 @@ export default Feed = (props) => {
   const updateSocialSearch = (search) => {
     setSocialSearch(search);
   }
+  const followUser = (usernameToFollow) => {
+    axios.post(apiUrl + "follow/", {accountUsername: username, usernameToFollow: usernameToFollow})
+    .then((res) => {
+      if (res.data === "OK"){
+        console.log(username + " is following " + usernameToFollow);
+      }
+      else{
+        setError(true);
+      }
+    });
+  }
+  const unFollowUser = (usernameToUnfollow) => {
+    axios.post(apiUrl + "unfollow/", {accountUsername: username, usernameToUnFollow: usernameToUnfollow})
+    .then((res) => {
+      if (res.data === "OK"){
+        console.log(username + " unfollowed " + usernameToUnfollow);
+      }
+      else{
+        setError(true);
+      }
+    });
+
+  }
 
   const getPosts = async () => {
-    const posts = await axios.get(apiUrl + "posts/");
+    var tempFollows = await axios.post(apiUrl + 'follows/', {accountUsername: username});
+    tempFollows = tempFollows.data;
+    setFollows(tempFollows);
+    const posts = await axios.post(apiUrl + "posts/", {follows: tempFollows, accountName: username});
     if (posts.data !== "ERROR"){
       if (posts.data.length <= 0){
         setPosts(null);
@@ -156,25 +194,36 @@ export default Feed = (props) => {
       setLoading(false);
     }
   }
+
   if (!loading){
     return (
-      // <>
-      // <StatusBar style='light'/>
+      <>
+      <StatusBar style='light'/>
       <View style={styles.feedContainer}>
           <Header type={'feed'} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
 
           <Modal animationType='slide' transparent={false} visible={showSocial}>
             <View style={styles.mainContainer}>
               <Header type={'contact'} closeFun={() => setShowSocial(false)}/>
+              
               <View style={styles.socialContentContainer}>
                 <TextInput style={styles.socialSearch} placeholder='Search Friends' onChangeText={updateSocialSearch} value={socialSearch}/>
-                <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={tempData} renderItem={temp => {
-                  return <Friend img="https://res.cloudinary.com/dqaxkucbu/image/upload/v1707364657/QuikSnap/yusjllmou8bpvxvlunbc.jpg" name="Isaac Johnson"/>
+                
+                <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={users} renderItem={user => {
+                  return <Friend an={username} follows={follows} img={user.item.pic} name={user.item.username} unFollowFun={unFollowUser} followFun={followUser}/>
                 }}>
-                  
                 </FlatList>
+                <View style={{paddingBottom: 20}}></View>
               </View>
 
+              <View style={styles.logoutBtnContainer}>
+                <View></View>
+                <View style={styles.logoutBtn}>
+                  <Pressable onPress={() => {logoutFun(); }} android_ripple={{color: 'black'}}>
+                      <Text style={styles.logoutBtnText}>LOGOUT</Text>
+                  </Pressable>
+                </View>
+              </View>
 
             </View>
           </Modal>
@@ -216,7 +265,6 @@ export default Feed = (props) => {
             btnText="OK"
           />
   
-  
           <View style={styles.feedScreen}>
             {posts !== null ? (
               <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
@@ -228,7 +276,7 @@ export default Feed = (props) => {
           </View>
   
       </View>
-      // </>
+      </>
     );
   }
   else if (loading){
@@ -388,6 +436,34 @@ const styles = StyleSheet.create({
       color: 'white',
       width: '100%',
       paddingHorizontal: 65
+  },
+
+  // Logout Button:
+  logoutBtnContainer: {
+    width: "100%",
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    position: 'absolute',
+    justifyContent: 'space-between'
+  },
+  logoutBtn: {
+    width: 200,
+    height: 40,
+    backgroundColor: '#cb0a0a',
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+    elevation: 10
+  },
+  logoutBtnText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '700',
+    paddingHorizontal: 59,
+    paddingVertical: 7,
   },
 
   // Error Text:

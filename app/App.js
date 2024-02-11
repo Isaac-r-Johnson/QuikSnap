@@ -20,15 +20,14 @@ export default function App() {
 
   useEffect(() => {
     console.log("Rendered");
-    // setLoading(true);
-    // setTimeout(() => { 
-    //       setLoading(false); 
-    //   }, 500);
+    setLoading(true);
+    setTimeout(() => { 
+          setLoading(false); 
+      }, 500);
   }, [page]);
 
   useEffect(() => {
     checkIfLoggedIn();
-    // clearStorage();
   }, []);
 
   const checkIfLoggedIn = async () => {
@@ -46,6 +45,7 @@ export default function App() {
 
   const clearStorage = () => {
     AsyncStorage.clear();
+    loadPage('start');
   }
 
   const switchToFeed = (username, password) => {
@@ -68,7 +68,7 @@ export default function App() {
     return (<Signup loadPage={loadPage} loadFeed={switchToFeed} apiUrl={apiUrl}/>);
   }
   else if (page === "feed" && !loading){
-    return (<Feed username={username} password={password} apiUrl={apiUrl} loadFeed={switchToFeed}/>);
+    return (<Feed username={username} password={password} apiUrl={apiUrl}  logoutFun={clearStorage} loadFeed={switchToFeed}/>);
   }
 
   if (loading){

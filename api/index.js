@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     pic: String,
+    follows: [String],
     key: String
 });
 const postSchema = new mongoose.Schema({
@@ -79,10 +80,15 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.get('/posts', async (req, res) => {
+app.get('/users', async (req, res) => {
     try {
-        const posts = await Post.find();
-        res.send(posts);
+        const tempUsers = await User.find();
+        const users = []
+        tempUsers.forEach(user => {
+            users.push({username: user.username, pic: user.pic});
+        });
+        console.log("Sent Users");
+        res.send(users);
     }
     catch (err){
         console.log(err);
@@ -97,19 +103,24 @@ app.post('/signup', upload.single('pic'), async (req, res) => {
         if (!req.file) {
             console.log("No File!");
         }
-        const picUrl = await uploadImage(req.file.buffer);
         const {username, password} = req.body;
-        const key = crypto.randomBytes(20).toString('base64');
-
-        User.insertMany([{
-            username: username,
-            password: password,
-            pic: picUrl,
-            key: key
-        }]);
-
-        console.log("Signup Made");
-        res.send("OK");
+        const checkUser = await User.findOne({username: username});
+        if (!checkUser){
+            const picUrl = await uploadImage(req.file.buffer);
+            const key = crypto.randomBytes(20).toString('base64');
+            User.insertMany([{
+                username: username,
+                password: password,
+                pic: picUrl,
+                key: key
+            }]);
+            console.log("Signup Made");
+            res.send("OK");
+        }
+        else {
+            console.log("Username Taken")
+            res.send("TAKEN");
+        }
     } catch (err){
         res.send("ERROR");
         throw err;
@@ -156,6 +167,70 @@ app.post('/post', upload.single('postImage'), async (req, res) => {
         res.send("ERROR");
     }
 });
+
+app.post('/follows', async (req, res) => {
+    try{
+        const username = req.body.accountUsername;
+        const user = await User.findOne({username: username});
+        res.send(user.follows);
+    } catch (err){
+        console.log("Follows Error: " + err);
+        res.send("ERROR");
+    }
+});
+
+app.post('/follow', async (req, res) => {
+    const {accountUsername, usernameToFollow} = req.body;
+    try{
+       const userToFollow = await User.findOne({username: usernameToFollow});
+       const follow = userToFollow.username;
+       await User.findOneAndUpdate({username: accountUsername}, {$push:{follows:follow}});
+       res.send("OK");
+    } catch (err){
+        console.log("Following Error: " + err);
+        res.send("ERROR");
+    }
+});
+
+app.post('/unfollow', async (req, res) => {
+    const {accountUsername, usernameToUnFollow} = req.body;
+    try{
+       const userToFollow = await User.findOne({username: usernameToUnFollow});
+       const follow = userToFollow.username;
+       await User.findOneAndUpdate({username: accountUsername}, {$pull:{follows:follow}});
+       res.send("OK");
+    } catch (err){
+        console.log("Following Error: " + err);
+        res.send("ERROR");
+    }
+});
+
+app.post('/posts', async (req, res) => {
+    try {
+        const {follows, accountName} = req.body;
+        const posts = await Post.find();
+        const postsToSend = [];
+        if (follows){
+            await posts.forEach(post => {
+                follows.forEach(follow => {
+                    if (post.poster.username === follow){
+                        postsToSend.push(post);
+                    }
+                });
+                if (post.poster.username === accountName){
+                    postsToSend.push(post);
+                }
+            });
+        }
+        console.log("Sent Posts");
+        res.send(postsToSend);
+    }
+    catch (err){
+        console.log(err);
+        res.send("ERROR");
+    }
+});
+
 // Start
 app.listen(process.env.PORT, () => {
     console.log("QuikSnap server is running on port " + process.env.PORT + "...");
