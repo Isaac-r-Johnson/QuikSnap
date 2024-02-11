@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({
     password: String,
     pic: String,
     follows: [String],
+    notifications: [{pic: String, text: String}],
     key: String
 });
 const postSchema = new mongoose.Schema({
@@ -182,10 +183,11 @@ app.post('/follows', async (req, res) => {
 app.post('/follow', async (req, res) => {
     const {accountUsername, usernameToFollow} = req.body;
     try{
-       const userToFollow = await User.findOne({username: usernameToFollow});
-       const follow = userToFollow.username;
-       await User.findOneAndUpdate({username: accountUsername}, {$push:{follows:follow}});
-       res.send("OK");
+        const currentUser = await User.findOne({username: accountUsername});
+        const userToFollow = await User.findOneAndUpdate({username: usernameToFollow}, {$push: {notifications:{pic:currentUser.pic, text: `${currentUser.username} is following you`}}});
+        const follow = userToFollow.username;
+        await User.findOneAndUpdate({username: accountUsername}, {$push:{follows:follow}});
+        res.send("OK");
     } catch (err){
         console.log("Following Error: " + err);
         res.send("ERROR");
@@ -195,8 +197,9 @@ app.post('/follow', async (req, res) => {
 app.post('/unfollow', async (req, res) => {
     const {accountUsername, usernameToUnFollow} = req.body;
     try{
-       const userToFollow = await User.findOne({username: usernameToUnFollow});
-       const follow = userToFollow.username;
+        const currentUser = await User.findOne({username: accountUsername});
+        const userToUnFollow = await User.findOneAndUpdate({username: usernameToUnFollow}, {$push: {notifications:{pic:currentUser.pic, text: `${currentUser.username} stopped following you`}}});
+       const follow = userToUnFollow.username;
        await User.findOneAndUpdate({username: accountUsername}, {$pull:{follows:follow}});
        res.send("OK");
     } catch (err){
@@ -230,6 +233,30 @@ app.post('/posts', async (req, res) => {
         res.send("ERROR");
     }
 });
+
+app.post('/notifications', async (req, res) => {
+    try{
+        const accountName = req.body.accountName;
+        const user = await User.findOne({username: accountName});
+        res.send(user.notifications);
+        console.log("Sent Notifications");
+    } catch (err){
+        console.log("Notification Error: " + err);
+        res.send('ERROR');
+    }
+});
+
+app.post('/clear-notifications', async (req, res) => {
+    try{
+        const accountName = req.body.accountName;
+        await User.findOneAndUpdate({username: accountName}, {$set: {notifications: []}});
+        res.send("OK");
+        console.log("Cleared Notifications");
+    } catch (err){
+        console.log("Notification Error: " + err);
+        res.send('ERROR');
+    }
+})
 
 // Start
 app.listen(process.env.PORT, () => {

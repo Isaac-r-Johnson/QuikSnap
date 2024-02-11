@@ -10,6 +10,7 @@ import Popup from '../components/Popup';
 import * as Location from 'expo-location';
 import Loading from '../components/Loading';
 import Friend from '../components/Friend';
+import Notification from '../components/Notification';
 
 export default Feed = (props) => {
   const {username, password, apiUrl, logoutFun, loadFeed} = props;
@@ -26,6 +27,9 @@ export default Feed = (props) => {
   const [socialSearch, setSocialSearch] = useState("");
   const [users, setUsers] = useState([]);
   const [follows, setFollows] = useState([]);
+  const [notification, setNotification] = useState(false);
+  const [viewNotification, setViewNotification] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     getPosts();
@@ -35,6 +39,7 @@ export default Feed = (props) => {
   useEffect(() => {
     if (!showSocial){
       getPosts();
+      getNotifications()
       console.log("Feed Update");
     }
     else{
@@ -95,7 +100,7 @@ export default Feed = (props) => {
     }
   }
   const post = async () => {
-    if (postTitle !== "" && postDes !== "" && postImage !== ""){
+    if (postTitle !== "" && postImage !== ""){
       const formData = new FormData();
         formData.append('postImage', {
           name: postImage.fileName,
@@ -172,7 +177,6 @@ export default Feed = (props) => {
     });
 
   }
-
   const getPosts = async () => {
     var tempFollows = await axios.post(apiUrl + 'follows/', {accountUsername: username});
     tempFollows = tempFollows.data;
@@ -194,13 +198,36 @@ export default Feed = (props) => {
       setLoading(false);
     }
   }
+  const getNotifications = async () => {
+    var rawData = await axios.post(apiUrl + 'notifications/', {accountName: username});
+    const tempNotifications = rawData.data;
+    if (tempNotifications !== "ERROR"){
+      if (tempNotifications.length > 0){
+        setNotifications(tempNotifications.reverse());
+        setNotification(true);
+      }
+    }
+    else{
+      setError(true);
+      console.log("Notification Error");
+    }
+  }
+  const clearNotifications = async () => {
+    setViewNotification(false);
+    setNotification(false);
+    setNotifications([]);
+    const res = await axios.post(apiUrl + 'clear-notifications/', {accountName: username});
+    if (res.data === "ERROR"){
+      console.log("Error occurred while clearing notifications on server side.")
+    }
+  }
 
   if (!loading){
     return (
       <>
       <StatusBar style='light'/>
       <View style={styles.feedContainer}>
-          <Header type={'feed'} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
+          <Header type={'feed'} notification={notification} notificationFun={() => {setViewNotification(true);}} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
 
           <Modal animationType='slide' transparent={false} visible={showSocial}>
             <View style={styles.mainContainer}>
@@ -210,7 +237,9 @@ export default Feed = (props) => {
                 <TextInput style={styles.socialSearch} placeholder='Search Friends' onChangeText={updateSocialSearch} value={socialSearch}/>
                 
                 <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={users} renderItem={user => {
-                  return <Friend an={username} follows={follows} img={user.item.pic} name={user.item.username} unFollowFun={unFollowUser} followFun={followUser}/>
+                  if (user.item.username.toLowerCase().includes(socialSearch.toLowerCase())){
+                    return <Friend an={username} follows={follows} img={user.item.pic} name={user.item.username} unFollowFun={unFollowUser} followFun={followUser}/>
+                  }
                 }}>
                 </FlatList>
                 <View style={{paddingBottom: 20}}></View>
@@ -227,7 +256,26 @@ export default Feed = (props) => {
 
             </View>
           </Modal>
-  
+
+          <Modal animationType='slide' transparent={false} visible={viewNotification}>
+            <View style={styles.mainContainer}>
+              <Header type={'contact'} closeFun={clearNotifications}/>
+              
+              <View style={styles.socialContentContainer}>
+                {notification ? (
+                  <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={notifications} renderItem={notifi => {
+                      return <Notification img={notifi.item.pic} notificationText={notifi.item.text}/>
+                    }}>
+                  </FlatList>
+                ):(
+                  <View style={styles.noNotiView}>
+                    <Text style={styles.noNotiText}>No Notifications</Text>
+                  </View>
+                )}
+                <View style={{paddingBottom: 70}}></View>
+              </View>
+            </View>
+          </Modal>
   
           <Modal animationType='slide' transparent={false} visible={addPost}>
             <View style={styles.addPostModal}>
@@ -239,8 +287,8 @@ export default Feed = (props) => {
               <View style={styles.postView}>
                 <Image style={styles.postImage} source={{ uri: postImage.uri }}/>
                 <View style={styles.postForm}>
-                  <TextInput style={styles.postTitle} onChangeText={updateTitle} value={postTitle} placeholder='Title'/>
-                  <TextInput multiline={true} numberOfLines={5} style={styles.postDes} onChangeText={updateDes} value={postDes} placeholder='Description'/>
+                  <TextInput style={styles.postTitle} maxLength={15} onChangeText={updateTitle} value={postTitle} placeholder='Title'/>
+                  <TextInput multiline={true} numberOfLines={5} style={styles.postDes} onChangeText={updateDes} value={postDes} placeholder='Description (optional)'/>
                   <View style={styles.postBtn}>
                     <Pressable android_ripple={{color: '#012657'}} onPress={post}>
                       <Text style={styles.postBtnText}>Post</Text>
@@ -271,7 +319,7 @@ export default Feed = (props) => {
                 return <Post posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
               }}/>
             ):(
-              <Text style={styles.errorText}>Loading Posts...</Text>
+              <Text style={styles.errorText}>No Posts</Text>
             )}
           </View>
   
@@ -329,6 +377,21 @@ const styles = StyleSheet.create({
       borderRadius: 6,
       color: 'black',
       fontSize: 20
+    },
+
+    // Notifications:
+    noNotiView: {
+      width: '100%',
+      height: 100,
+      display: 'flex',
+      alignItems: 'center'
+    },
+    noNotiText: {
+      color: 'black',
+      fontSize: 32,
+      fontWeight: '600',
+      borderBottomWidth: 2,
+      borderBottomColor: 'black'
     },
 
     // Add Post

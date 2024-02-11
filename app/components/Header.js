@@ -1,6 +1,14 @@
 import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
 
 export default Header = (props) => {
+    var bellImage = '';
+    if (props.notification){
+        bellImage = require('../assets/yesBell.png');
+    }
+    else {
+        bellImage = require('../assets/noBell.png');
+    }
+
     if (props.type === 'feed'){
         return (
             <View style={styles.overlay}>
@@ -11,10 +19,17 @@ export default Header = (props) => {
                         </Pressable>
                         <Text style={styles.headerText}>QuikSnap</Text>
                     </View>
-                    <View style={styles.postBtnView}>
-                        <Pressable onPress={props.addPostFun}>
-                            <Image style={styles.postBtnImage} source={require("../assets/postBtn.png")}/>
-                        </Pressable>
+                    <View style={styles.rightContainer}>
+                        <View>
+                            <Pressable onPress={props.notificationFun}>
+                                <Image style={styles.closeBtnImage} source={bellImage}/>
+                            </Pressable>
+                        </View>
+                        <View style={styles.postBtnView}>
+                            <Pressable onPress={props.addPostFun}>
+                                <Image style={styles.postBtnImage} source={require("../assets/postBtn.png")}/>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -82,6 +97,10 @@ const styles = StyleSheet.create({
     },
     left: {
         flexDirection: 'row'
+    },
+    rightContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     headerText: {
         color: '#F9F8F5',

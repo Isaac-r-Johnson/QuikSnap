@@ -106,7 +106,7 @@ export default Signup = (props) => {
         <View style={styles.signupBox}>
           <Text style={styles.signupText}>SignUp</Text>
           <View style={styles.signupInputContainer}>
-            <TextInput style={styles.signupInput} onChangeText={updateUsernameField} value={username} placeholder='Username'/>
+            <TextInput style={styles.signupInput} maxLength={13} onChangeText={updateUsernameField} value={username} placeholder='Username'/>
             <TextInput style={styles.signupInput} secureTextEntry={true} onChangeText={updatePasswordField} value={password} placeholder='Password'/>
             {pic ? (
               <View style={styles.profilePictureView}>
