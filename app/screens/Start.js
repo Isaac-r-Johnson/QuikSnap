@@ -1,6 +1,7 @@
 import {StyleSheet, Pressable, View, Text} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Header from '../components/Header';
+import { Fragment } from 'react';
 
 
 
@@ -8,7 +9,7 @@ export default function Start(props) {
   const {loadPage} = props;
 
   return (
-    <>
+    <Fragment>
     <StatusBar style='light'/>
     <Header/>
     <View style={styles.startPage}>
@@ -24,7 +25,7 @@ export default function Start(props) {
             </Pressable>
         </View>
     </View>
-    </>
+    </Fragment>
   );
 }
 

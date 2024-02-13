@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Pressable, Modal } from 'react-native';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import Popup from '../components/Popup';
@@ -50,7 +50,7 @@ export default Login = (props) => {
   }
 
   return (
-    <>
+    <Fragment>
     <StatusBar style='light'/>
     <View style={styles.loginContainer}>
       <Header/>
@@ -94,7 +94,7 @@ export default Login = (props) => {
         </View>
       </View>
     </View>
-    </>
+    </Fragment>
   );
 }
 

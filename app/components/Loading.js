@@ -1,4 +1,4 @@
-import { StyleSheet, View, Animated, Easing} from 'react-native';
+import { StyleSheet, View, Animated, Easing, Text} from 'react-native';
 import React from 'react';
 
 export default Loading = () => {
@@ -8,7 +8,7 @@ export default Loading = () => {
     Animated.loop(
       Animated.timing(rotationValue, {
         toValue: 1,
-        duration: 750, // Adjust the duration as needed
+        duration: 500, // Adjust the duration as needed
         easing: Easing.linear,
         useNativeDriver: true,
       })
@@ -23,6 +23,7 @@ export default Loading = () => {
     return (
         <View style={styles.main}>
             <Animated.View style={{ ...styles.loading, transform: [{rotate: rotateInterpolate}]}}></Animated.View>
+            <Text style={styles.text}>Loading....</Text>
         </View>
     );
 }
@@ -44,7 +45,11 @@ const styles = StyleSheet.create({
       borderRadius: 100,
       borderWidth: 5,
       borderBottomRightRadius: 10,
-      elevation: 20
+      elevation: 20,
+      marginBottom: 15
   },
+  text: {
+    fontSize: 17
+  }
 
 });

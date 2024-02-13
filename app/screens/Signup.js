@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Pressable, Button, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
@@ -74,7 +74,7 @@ export default Signup = (props) => {
   } 
 
   return (
-    <>
+    <Fragment>
     <StatusBar style='light'/>
     <View style={styles.signupContainer}>
       <Header/>
@@ -127,7 +127,7 @@ export default Signup = (props) => {
         </View>
       </View>
     </View>
-    </>
+    </Fragment>
   );
 }
 

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, Image, Modal, TextInput, Pressable } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
@@ -51,6 +51,7 @@ export default Feed = (props) => {
   }, [showSocial]);
 
   const getLocation = async () => {
+    setLoading(true);
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       console.error('Location permission not granted');
@@ -89,14 +90,16 @@ export default Feed = (props) => {
     }
   }
   const createPost = async () => {
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-    });
-    getLocation();
-    if (!result.canceled){
-      setPostImage(result.assets[0]);
-      setAddPost(true);
+    try{
+      const result = await ImagePicker.launchCameraAsync();
+      await getLocation();
+      setLoading(false);
+      if (!result.canceled){
+        setPostImage(result.assets[0]);
+        setAddPost(true);
+      }
+    } catch (err){
+      console.log("Error Creating Post: " + err);
     }
   }
   const post = async () => {
@@ -224,12 +227,12 @@ export default Feed = (props) => {
 
   if (!loading){
     return (
-      <>
-      <StatusBar style='light'/>
-      <View style={styles.feedContainer}>
-          <Header type={'feed'} notification={notification} notificationFun={() => {setViewNotification(true);}} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
-
-          <Modal animationType='slide' transparent={false} visible={showSocial}>
+      <Fragment>
+        <StatusBar style='light'/>
+        <View style={styles.feedContainer}>
+            <Header type={'feed'} notification={notification} notificationFun={() => {setViewNotification(true);}} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
+      
+            <Modal animationType='slide' transparent={false} visible={showSocial}>
             <View style={styles.mainContainer}>
               <Header type={'contact'} closeFun={() => setShowSocial(false)}/>
               
@@ -255,9 +258,9 @@ export default Feed = (props) => {
               </View>
 
             </View>
-          </Modal>
-
-          <Modal animationType='slide' transparent={false} visible={viewNotification}>
+            </Modal>
+                
+            <Modal animationType='slide' transparent={false} visible={viewNotification}>
             <View style={styles.mainContainer}>
               <Header type={'contact'} closeFun={clearNotifications}/>
               
@@ -275,9 +278,9 @@ export default Feed = (props) => {
                 <View style={{paddingBottom: 70}}></View>
               </View>
             </View>
-          </Modal>
-  
-          <Modal animationType='slide' transparent={false} visible={addPost}>
+            </Modal>
+                  
+            <Modal animationType='slide' transparent={false} visible={addPost}>
             <View style={styles.addPostModal}>
             <View style={styles.backBtn}>
               <Pressable onPress={cancelPost}>
@@ -297,34 +300,34 @@ export default Feed = (props) => {
                 </View>
               </View>
             </View>
-          </Modal>
-  
-          <Popup
-            modalVisible={notFilled}
-            setModalVisible={setNotFilled}
-            popupMessage="Complete All Fields!"
-            btnText="Close"
-          />
-  
-          <Popup
-            modalVisible={error}
+            </Modal>
+                  
+            <Popup
+              modalVisible={notFilled}
+              setModalVisible={setNotFilled}
+              popupMessage="Complete All Fields!"
+              btnText="Close"
+            />
+                  
+            <Popup
+              modalVisible={error}
             setModalVisible={setError}
             popupMessage="An Error has Occurred. Sorry!"
             btnText="OK"
-          />
-  
-          <View style={styles.feedScreen}>
-            {posts !== null ? (
-              <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
-                return <Post posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
-              }}/>
-            ):(
-              <Text style={styles.errorText}>No Posts</Text>
-            )}
-          </View>
-  
-      </View>
-      </>
+            />
+                  
+            <View style={styles.feedScreen}>
+              {posts !== null ? (
+                <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
+                  return <Post posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
+                }}/>
+              ):(
+                <Text style={styles.errorText}>No Posts</Text>
+              )}
+            </View>
+              
+        </View>
+      </Fragment>
     );
   }
   else if (loading){
