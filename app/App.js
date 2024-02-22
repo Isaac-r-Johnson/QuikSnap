@@ -1,8 +1,5 @@
 import {useState, useEffect} from 'react'
 import 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import FormData from 'form-data';
-import axios from 'axios';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Feed from './screens/Feed';
@@ -15,8 +12,8 @@ export default function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const apiUrl = "https://quiksnap-api.vercel.app/";
-  // const apiUrl = "http://192.168.1.193:5000/";
+  // const apiUrl = "https://quiksnap-api.vercel.app/";
+  const apiUrl = "http://192.168.1.193:5000/";
 
   useEffect(() => {
     console.log("Rendered");

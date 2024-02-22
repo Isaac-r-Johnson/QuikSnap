@@ -27,7 +27,7 @@ export default Header = (props) => {
                         </View>
                         <View style={styles.postBtnView}>
                             <Pressable onPress={props.addPostFun}>
-                                <Image style={styles.postBtnImage} source={require("../assets/postBtn.png")}/>
+                                <Image style={styles.postBtnImage} source={require("../assets/addPostBtn.png")}/>
                             </Pressable>
                         </View>
                     </View>

@@ -10,6 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const fs = require('fs');
 const crypto = require('crypto');
+const md5 = require('md5');
 
 
 // System
@@ -45,8 +46,8 @@ const postSchema = new mongoose.Schema({
     description: String,
     pic: String,
     key: String,
-    likeCount: Number,
-    dislikeCount: Number
+    likeCount: [{username: String, pic: String}],
+    dislikeCount: [{username: String, pic: String}]
 })
 const User = new mongoose.model('User', userSchema);
 const Post = new mongoose.model('Post', postSchema);
@@ -111,7 +112,7 @@ app.post('/signup', upload.single('pic'), async (req, res) => {
             const key = crypto.randomBytes(20).toString('base64');
             User.insertMany([{
                 username: username,
-                password: password,
+                password: md5(password),
                 pic: picUrl,
                 key: key
             }]);
@@ -131,7 +132,7 @@ app.post('/signup', upload.single('pic'), async (req, res) => {
 app.post('/login', async (req, res) => {
     const {username, password} = req.body;
     try {
-        const user = await User.findOne({username: username, password: password});
+        const user = await User.findOne({username: username, password: md5(password)});
         if (user){
             res.send('OK');
         }
@@ -150,7 +151,7 @@ app.post('/post', upload.single('postImage'), async (req, res) => {
         const picUrl = await uploadImage(req.file.buffer);
         const {postTitle, postDes, username, password, location} = req.body;
         const key = crypto.randomBytes(20).toString('base64');
-        const user = await User.findOne({username: username, password: password});
+        const user = await User.findOne({username: username, password: md5(password)});
         Post.insertMany([{
             poster: {username: user.username, pic: user.pic},
             location: location,

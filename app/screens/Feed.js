@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, Image, Modal, TextInput, Pressable } from 'react-native';
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
@@ -39,7 +39,7 @@ export default Feed = (props) => {
   useEffect(() => {
     if (!showSocial){
       getPosts();
-      getNotifications()
+      getNotifications();
       console.log("Feed Update");
     }
     else{

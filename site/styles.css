@@ -1,0 +1,376 @@
+/* System Edits */
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+
+/* Header */
+header{
+    width: 100vw;
+    height: 75px;
+    position: absolute;
+    background-color: #012657;
+    display: flex;
+    align-items: center;
+}
+header > img{
+    height: 65%;
+    margin-left: 15px;
+    margin-right: 3px;
+}
+header > h1{
+    color: white;
+    font-family: "Inter", sans-serif;
+}
+
+/* Download Section */
+/* Text Side */
+.download-sec{
+    background: rgb(1,13,43);
+    background: linear-gradient(315deg, rgba(1,13,43,1) 14%, rgba(1,60,117,1) 53%, rgba(35,79,255,1) 100%);
+    width: 100vw;
+    min-height: 100vh;
+    max-height: fit-content;
+    display: grid;
+    grid-template-columns: 1.8fr 3fr;
+    grid-template-rows: 1fr;
+}
+.download-text{
+    margin-top: 75px;
+    padding-top: 40px;
+    padding-left: 60px;
+    margin-right: 10px;
+}
+.download-text > h1{
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 3em;
+}
+.download-text > h3{
+    color: white;
+    font-family: "Inter", sans-serif;
+    margin-top: 10px;
+    font-weight: 200;
+    font-size: 1.2em;
+}
+.download-text > div{
+    display: flex;
+    margin-top: 20px;
+}
+.direct-download{
+    width: 150px;
+    height: 46.7px;
+    color: white;
+    font-weight: 500;
+    font-size: 1.1em;
+    font-family: "Inter", sans-serif;
+    background-color: black;
+    border: 1px solid #012657;
+    border-radius: 5px;
+}
+.direct-download:hover{
+    cursor: pointer;
+    border-color: white;
+}
+.store-download{
+    width: 150px;
+    border-radius: 5px;
+    margin-right: 10px;
+    border: 1px solid #012657;
+}
+.store-download:hover{
+    cursor: pointer;
+    border-color: white;
+}
+
+/* Device Example Side */
+.download-device-ex{
+    margin-top: 75px;
+    padding-top: 40px;
+    padding-right: 50px;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.ex-tablet{
+    width: 500px;
+    height: 600px;
+    border: 10px solid black;
+    border-radius: 20px;
+}
+.ex-phone{
+    top: 275px;
+    right: 390px;
+    position: absolute;
+    width: 300px;
+    height: 475px;
+    border: 10px solid black;
+    border-radius: 20px;
+}
+.download-device-ex img{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+@media (min-width: 1400px){
+    .ex-tablet{
+        width: 600px;
+        height: 700px;
+    }
+    .ex-phone{
+        width: 400px;
+        height: 575px;
+    }
+}
+@media (min-width: 1700px){
+    .download-text > h1{
+        font-size: 4em;
+    }
+    .download-text > h3{
+        font-size: 1.4em;
+    }
+    .direct-download{
+        width: 200px;
+        height: 50px;
+    }
+    .store-download{
+        width: 200px;
+    }
+    .ex-tablet{
+        width: 700px;
+        height: 800px;
+    }
+    .ex-phone{
+        width: 500px;
+        height: 675px;
+    }
+}
+@media (max-width: 1108px){
+    .download-sec{
+        display: flex;
+        flex-direction: column;
+    }
+    .ex-tablet{
+        width: 500px;
+        height: 600px;
+        margin-right: -150px;
+    }
+    .download-device-ex{
+        align-self: center;
+        display: block;
+        padding-bottom: 40px;
+    }
+    .ex-phone{
+        width: 300px;
+        height: 475px;
+        position: initial;
+        margin-top: -450px;
+        margin-left: -90px;
+    }
+}
+@media (max-width: 650px){
+    .download-device-ex{
+        padding-bottom: 80px;
+    }
+    .ex-tablet{
+        width: 400px;
+        height: 500px;
+        margin-right: -150px;
+    }
+    .ex-phone{
+        width: 200px;
+        height: 375px;
+        position: initial;
+        margin-top: -360px;
+        margin-left: -90px;
+    }
+}
+@media (max-width: 530px){
+    .download-device-ex{
+        padding-bottom: 175px;
+    }
+    .ex-tablet{
+        width: 350px;
+        height: 450px;
+        margin-right: -150px;
+    }
+    .ex-phone{
+        margin-top: -360px;
+        margin-left: -90px;
+    }
+}
+@media (max-width: 475px){
+    .download-text{
+        margin-top: 50px;
+        padding-top: 40px;
+        padding-left: 20px;
+    }
+    .download-device-ex{
+        padding-bottom: 175px;
+    }
+    .ex-tablet{
+        width: 250px;
+        height: 350px;
+        margin-right: -105px;
+    }
+    .ex-phone{
+        width: 150px;
+        height: 275px;
+        margin-top: -275px;
+        margin-left: -60px;
+    }
+}
+
+/* Features Section */
+.feature-sec{
+    background-color: rgb(255, 255, 255);
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.feature-sec-cont{
+    width: fit-content
+}
+.feature-sec h1{
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 3em;
+}
+.feature-reasons{
+    width: 85vw;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+@media (max-width: 950px){
+    .feature-reasons{
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0;
+    }
+    .feature-reason{
+        margin-top: 30px;
+    }
+}
+.feature-reason{
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+
+}
+.icon{
+    width: 35px;
+    height: 35px;
+}
+.feature-reason h3{
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 1.5em;
+    margin: 10px 0px 10px 0px;
+}
+.feature-reason h5{
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: .9em;
+    line-height: 1.5;
+}
+@media (min-width: 1440px){
+    .feature-reason{
+        width: 310px
+    }
+    .icon{
+        width: 45px;
+        height: 45px;
+    }
+    .feature-reason h3{
+        font-size: 2em;
+    }
+    .feature-reason h5{
+        font-size: 1em;
+    }
+}
+
+/* About Section */
+
+
+/* Footer */
+footer{
+    width: 100vw;
+    height: fit-content;
+    position: absolute;
+    background-color: #012657;
+    display: flex;
+    justify-content: space-between;
+}
+.lefty{
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+.lefty > div{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.lefty > div > img{
+    width: 30px;
+    margin-right: 2px;
+}
+.lefty > div > h3{
+    font-family: "Inter", sans-serif;
+    color: white;
+    font-size: 1.4em;
+}
+.lefty > h4{
+    font-family: "Inter", sans-serif;
+    color: white;
+    font-weight: 300;
+    margin-top: 2px;
+}
+.lefty > h4 a{
+    color: white;
+    text-decoration: none;
+}
+.lefty > h4 a:hover{
+    text-decoration: underline;
+}
+.righty{
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+.righty > div{
+    display: flex;
+}
+.righty > h3{
+    font-family: "Inter", sans-serif;
+    color: white;
+    font-weight: 200;
+    margin-top: 35px;
+}
+@media (max-width: 635px){
+    footer{
+        flex-direction: column;
+    }
+    .lefty{
+        padding-bottom: 0px;
+    }
+    .righty{
+        padding-top: 20px;
+        padding-left: 20px;
+    }
+    .righty > h3{
+        margin-top: 10px;
+    }
+}
