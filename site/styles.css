@@ -360,10 +360,10 @@ header > h1{
     justify-content: center;
     align-items: center;
     margin-right: var(--margin);
-    margin-bottom: 100px;
+    margin-bottom: 115px;
 }
 .ex1{
-    width: 375px;
+    width: 350px;
     height: 575px;
     border: 8px solid black;
     border-radius: 15px;
