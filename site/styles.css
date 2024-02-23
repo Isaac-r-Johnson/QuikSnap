@@ -360,7 +360,7 @@ header > h1{
     justify-content: center;
     align-items: center;
     margin-right: var(--margin);
-    margin-bottom: 115px;
+    margin-bottom: 125px;
 }
 .ex1{
     width: 350px;
@@ -422,7 +422,7 @@ header > h1{
         margin-bottom: 250px;
     }
     .tr{
-        margin-bottom: 95px;
+        margin-bottom: 80px;
     }
     .tl h5{
         font-size: 1.6em;
