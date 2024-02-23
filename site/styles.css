@@ -360,7 +360,7 @@ header > h1{
     justify-content: center;
     align-items: center;
     margin-right: var(--margin);
-    margin-bottom: 85px;
+    margin-bottom: 100px;
 }
 .ex1{
     width: 375px;
@@ -379,7 +379,7 @@ header > h1{
     margin-left: var(--margin);
 }
 .ex2{
-    width: 625px;
+    width: 590px;
     height: 325px;
     border: 8px solid black;
     border-radius: 15px;
