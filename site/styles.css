@@ -421,9 +421,6 @@ header > h1{
     .tl{
         margin-bottom: 250px;
     }
-    .tr{
-        margin-bottom: 0px;
-    }
     .tl h5{
         font-size: 1.6em;
         line-height: 35px;
@@ -434,6 +431,9 @@ header > h1{
     .ex2{
         width: 800px;
         height: 415px;
+    }
+    .br{
+        padding-bottom: 30px;
     }
     .br h5{
         font-size: 1.6em;
