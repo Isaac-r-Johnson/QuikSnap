@@ -232,7 +232,7 @@ header > h1{
 .feature-sec{
     background-color: rgb(255, 255, 255);
     padding-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 35px;
     width: 100vw;
     height: fit-content;
     display: flex;
@@ -302,7 +302,137 @@ header > h1{
 }
 
 /* About Section */
+.about-sec{
+    background: rgb(1,13,43);
+    background: linear-gradient(315deg, rgba(1,13,43,1) 14%, rgba(1,60,117,1) 53%, rgba(35,79,255,1) 100%);
+    width: 100vw;
+    height: fit-content;
+    padding-top: 50px;
+}
+.top{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 50px;
+}
+.tl{
+    width: 100%;
+    margin-left: 50px
+}
+.tl h1{
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 3em;
+    margin-bottom: 25px;
+    color: white;
+}
+.tl h5{
+    margin: 10px 0px 10px 0px;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+    width: 50%;
+    line-height: 25px;
+    color: white;
+}
+.tl h3{
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    color: white;
+    font-size: 1.3em;
+}
+.tr{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ex1{
+    width: 250px;
+    height: 450px;
+    border: 8px solid black;
+    border-radius: 15px;
+}
+.ex1 > img{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+.bottom{
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    padding-bottom: 30px;
+}
+.bl{
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+}
+.ex2{
+    width: 475px;
+    height: 225px;
+    border: 8px solid black;
+    border-radius: 15px;
+}
+.ex2 > img{
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+}
+.br{
+    width: fit-content;
+    margin-left: 4.5vw;
 
+}
+.br h5{
+    margin: 10px 0px 10px 0px;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+    width: 70%;
+    line-height: 25px;
+    color: white;
+}
+.br h3{
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    color: white;
+    font-size: 1.3em;
+}
+@media (max-width: 1000px){
+    .top{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .tl{
+        width: fit-content;
+    }
+
+    .tl h5{
+        width: 300px;
+        margin-bottom: 20px;
+    }
+    .bottom{
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        margin-left: -30px;
+    }
+    .br{
+        width: fit-content;
+    }
+    .br h5{
+        width: 300px;
+        margin-bottom: 20px;
+    }
+}
+@media (max-width: 530px){
+    .ex2{
+        width: 350px;
+        height: 175px
+    }
+}
 
 /* Footer */
 footer{
