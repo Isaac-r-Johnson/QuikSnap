@@ -138,7 +138,7 @@ header > h1{
     }
     .direct-download{
         width: 200px;
-        height: 50px;
+        height: 60px;
     }
     .store-download{
         width: 200px;
@@ -330,7 +330,7 @@ header > h1{
 .tl{
     margin-left: var(--margin);
     width: fit-content;
-    margin-bottom: 315px;
+    margin-bottom: 240px;
 }
 .tl h1{
     font-family: "Inter", sans-serif;
@@ -354,16 +354,14 @@ header > h1{
     color: white;
     font-size: 1.6em;
 }
-
 .tr{
     width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: var(--margin);
-    margin-bottom: 125px;
+    margin-bottom: 85px;
 }
-
 .ex1{
     width: 375px;
     height: 575px;
@@ -375,13 +373,11 @@ header > h1{
     height: 100%;
     border-radius: 5px;
 }
-
 .bl{
     width: fit-content;
     display: flex;
     margin-left: var(--margin);
 }
-
 .ex2{
     width: 625px;
     height: 325px;
@@ -393,7 +389,6 @@ header > h1{
     height: 100%;
     border-radius: 7px;
 }
-
 .br{
     width: 50%;
     margin-right: var(--margin);
@@ -415,7 +410,36 @@ header > h1{
     font-size: 1.6em;
     width: fit-content;
 }
-
+@media (min-width: 1750px){
+    .left h1{
+        font-size: 4em;
+    }
+    .ex1{
+        width: 475px;
+        height: 700px;
+    }
+    .tl{
+        margin-bottom: 250px;
+    }
+    .tl h5{
+        font-size: 1.6em;
+        line-height: 35px;
+    }
+    .tl h3{
+        font-size: 1.9em;
+    }
+    .ex2{
+        width: 800px;
+        height: 415px;
+    }
+    .br h5{
+        font-size: 1.6em;
+        line-height: 35px;
+    }
+    .br h3{
+        font-size: 1.9em;
+    }
+}
 @media (max-width: 1090px){
     .about-sec{
         flex-direction: column;
