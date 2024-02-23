@@ -302,21 +302,35 @@ header > h1{
 }
 
 /* About Section */
+:root{
+    --margin: 60px;
+}
 .about-sec{
     background: rgb(1,13,43);
     background: linear-gradient(315deg, rgba(1,13,43,1) 14%, rgba(1,60,117,1) 53%, rgba(35,79,255,1) 100%);
     width: 100vw;
     height: fit-content;
     padding-top: 50px;
+    display: flex;
 }
-.top{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.left{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50vw;
     margin-bottom: 50px;
 }
+.right{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 50vw;
+    padding-bottom: 30px;
+}
 .tl{
-    width: 100%;
-    margin-left: 50px
+    margin-left: var(--margin);
+    width: fit-content;
+    margin-bottom: 315px;
 }
 .tl h1{
     font-family: "Inter", sans-serif;
@@ -328,8 +342,8 @@ header > h1{
 .tl h5{
     margin: 10px 0px 10px 0px;
     font-family: "Inter", sans-serif;
-    font-weight: 300;
-    font-size: 1em;
+    font-weight: 200;
+    font-size: 1.3em;
     width: 50%;
     line-height: 25px;
     color: white;
@@ -338,17 +352,21 @@ header > h1{
     font-family: "Inter", sans-serif;
     font-weight: 400;
     color: white;
-    font-size: 1.3em;
+    font-size: 1.6em;
 }
+
 .tr{
-    width: 100%;
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: var(--margin);
+    margin-bottom: 125px;
 }
+
 .ex1{
-    width: 250px;
-    height: 450px;
+    width: 375px;
+    height: 575px;
     border: 8px solid black;
     border-radius: 15px;
 }
@@ -357,20 +375,16 @@ header > h1{
     height: 100%;
     border-radius: 5px;
 }
-.bottom{
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    padding-bottom: 30px;
-}
+
 .bl{
     width: fit-content;
     display: flex;
-    align-items: center;
-    margin-left: 50px;
+    margin-left: var(--margin);
 }
+
 .ex2{
-    width: 475px;
-    height: 225px;
+    width: 625px;
+    height: 325px;
     border: 8px solid black;
     border-radius: 15px;
 }
@@ -379,17 +393,18 @@ header > h1{
     height: 100%;
     border-radius: 7px;
 }
+
 .br{
-    width: fit-content;
-    margin-left: 4.5vw;
+    width: 50%;
+    margin-right: var(--margin);
 
 }
 .br h5{
     margin: 10px 0px 10px 0px;
     font-family: "Inter", sans-serif;
-    font-weight: 300;
-    font-size: 1em;
-    width: 70%;
+    font-weight: 200;
+    font-size: 1.3em;
+    width: 100%;
     line-height: 25px;
     color: white;
 }
@@ -397,40 +412,45 @@ header > h1{
     font-family: "Inter", sans-serif;
     font-weight: 400;
     color: white;
-    font-size: 1.3em;
+    font-size: 1.6em;
+    width: fit-content;
 }
-@media (max-width: 1000px){
-    .top{
-        display: flex;
+
+@media (max-width: 1090px){
+    .about-sec{
         flex-direction: column;
+    }
+    .bl{
+        display: none;
+    }
+    .tr{
+        display: none;
+    }
+    .right{
+        justify-content: flex-end;
+        width: 100vw;
         align-items: center;
+    }
+    .left{
+        width: 100vw;
+        align-items: center;
+        margin-bottom: 10px;
     }
     .tl{
+        margin-left: 0px;
+        width: 40%;
+        margin-bottom: 0px;
         width: fit-content;
     }
-
-    .tl h5{
-        width: 300px;
-        margin-bottom: 20px;
+    .tl h3{
+        width: fit-content;
     }
-    .bottom{
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-        margin-left: -30px;
+    .tl h5{
+        width: 350px;
     }
     .br{
-        width: fit-content;
-    }
-    .br h5{
-        width: 300px;
-        margin-bottom: 20px;
-    }
-}
-@media (max-width: 530px){
-    .ex2{
+        margin-right: 0px;
         width: 350px;
-        height: 175px
     }
 }
 
