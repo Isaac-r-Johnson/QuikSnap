@@ -11,6 +11,7 @@ import * as Location from 'expo-location';
 import Loading from '../components/Loading';
 import Friend from '../components/Friend';
 import Notification from '../components/Notification';
+import Footer from '../components/Footer';
 
 export default Feed = (props) => {
   const {username, password, apiUrl, logoutFun, loadFeed} = props;
@@ -23,7 +24,7 @@ export default Feed = (props) => {
   const [posts, setPosts] = useState(null);
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(true);
-  const [showSocial, setShowSocial] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const [socialSearch, setSocialSearch] = useState("");
   const [users, setUsers] = useState([]);
   const [follows, setFollows] = useState([]);
@@ -37,7 +38,7 @@ export default Feed = (props) => {
   }, [addPost]);
 
   useEffect(() => {
-    if (!showSocial){
+    if (!showAccount){
       getPosts();
       getNotifications();
       console.log("Feed Update");
@@ -48,7 +49,7 @@ export default Feed = (props) => {
         setUsers(res.data);
       });
     }
-  }, [showSocial]);
+  }, [showAccount]);
 
   const getLocation = async () => {
     setLoading(true);
@@ -230,11 +231,11 @@ export default Feed = (props) => {
       <Fragment>
         <StatusBar style='light'/>
         <View style={styles.feedContainer}>
-            <Header type={'feed'} notification={notification} notificationFun={() => {setViewNotification(true);}} openFun={() => setShowSocial(true)} addPostFun={createPost}/>
+            <Header type={'feed'} notification={notification} notificationFun={() => {setViewNotification(true);}} addPostFun={createPost}/>
       
-            <Modal animationType='slide' transparent={false} visible={showSocial}>
+            <Modal animationType='slide' transparent={false} visible={showAccount}>
             <View style={styles.mainContainer}>
-              <Header type={'contact'} closeFun={() => setShowSocial(false)}/>
+              <Header type={'contact'} closeFun={() => setShowAccount(false)}/>
               
               <View style={styles.socialContentContainer}>
                 <TextInput style={styles.socialSearch} placeholder='Search Friends' onChangeText={updateSocialSearch} value={socialSearch}/>
@@ -325,7 +326,7 @@ export default Feed = (props) => {
                 <Text style={styles.errorText}>No Posts</Text>
               )}
             </View>
-              
+            <Footer postFun={createPost} showFeed={() => setShowAccount(false)} showAccount={() => setShowAccount(true)}/>
         </View>
       </Fragment>
     );

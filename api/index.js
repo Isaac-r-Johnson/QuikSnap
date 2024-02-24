@@ -159,8 +159,8 @@ app.post('/post', upload.single('postImage'), async (req, res) => {
             description: postDes,
             pic: picUrl,
             key: key,
-            likeCount: 0,
-            dislikeCount: 0
+            likeCount: [],
+            dislikeCount: []
         }]);
         console.log("Post Uploaded!");
         res.send("OK");
