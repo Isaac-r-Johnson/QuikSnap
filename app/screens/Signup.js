@@ -55,7 +55,13 @@ export default Signup = (props) => {
             AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
             AsyncStorage.setItem('storedUsername', username);
             AsyncStorage.setItem('storedPassword', password);
-            loadFeed(username, password);
+            const pic = await axios.post(apiUrl + "usrpic/", {username: username, password: password});
+            if (pic.data !== "ERROR"){
+              loadFeed(username, password, pic.data);
+            }
+            else {
+              console.log("Error while logging in!");
+            }
           }
           else if (res.data === "TAKEN"){
             setTaken(true);

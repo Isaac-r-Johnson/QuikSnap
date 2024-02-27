@@ -146,6 +146,19 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post('/usrpic', async (req, res) => {
+    try {
+        const theUser = await User.findOne({username: req.body.username, password: md5(req.body.password)});
+        console.log("Send Pic");
+        console.log(theUser.pic);
+        res.send(theUser.pic);
+   
+    } catch (err){
+        console.log("Error while sending pic!");
+        rets.send("ERROR");
+    }
+});
+
 app.post('/post', upload.single('postImage'), async (req, res) => {
     try {
         const picUrl = await uploadImage(req.file.buffer);

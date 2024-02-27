@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 10
     },
     closeBtnImage: {
-        width: 30,
-        height: 30,
+        width: 27,
+        height: 27,
         marginHorizontal: 5
     },
     bellBtnImage: {

@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     footerIcon: {
         width: 20,
-        height: 20 , 
+        height: 20,
     },
     footerIconPressed: {
 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         marginBottom: 25
     },
     postBtn: {
-        marginLeft: "5%",
+        marginLeft: "6%",
         alignItems: 'center',
         backgroundColor: '#004AAD',
         borderRadius: 50,

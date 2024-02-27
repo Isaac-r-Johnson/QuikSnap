@@ -6,21 +6,24 @@ import Feed from './screens/Feed';
 import Start from './screens/Start';
 import Loading from './components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PushNotificationObject } from 'react-native-push-notification';
+import axios from 'axios';
 
 export default function App() {
   const [page, setPage] = useState("start");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [thePic, setPic] = useState("");
   const [loading, setLoading] = useState(false);
   // const apiUrl = "https://quiksnap-api.vercel.app/";
   const apiUrl = "http://192.168.1.193:5000/";
 
   useEffect(() => {
     console.log("Rendered");
-    setLoading(true);
-    setTimeout(() => { 
-          setLoading(false); 
-      }, 500);
+    // setLoading(true);
+    // setTimeout(() => { 
+    //       setLoading(false); 
+    //   }, 500);
   }, [page]);
 
   useEffect(() => {
@@ -33,7 +36,13 @@ export default function App() {
       if (data){
         const usrn = await AsyncStorage.getItem("storedUsername");
         const pass = await AsyncStorage.getItem("storedPassword");
-        switchToFeed(usrn, pass);
+        const pic = await axios.post(apiUrl + "usrpic/", {username: usrn, password: pass});
+        if (pic.data !== "ERROR"){
+          switchToFeed(usrn, pass, pic.data);
+        }
+        else {
+          console.log("Error while logging in!");
+        }
       }
     } catch (err){
       console.log("Error reading storage: " + err);
@@ -45,9 +54,10 @@ export default function App() {
     loadPage('start');
   }
 
-  const switchToFeed = (username, password) => {
+  const switchToFeed = (username, password, pic) => {
     setUsername(username);
     setPassword(password);
+    setPic(pic)
     setPage('feed');
   }
 
@@ -65,7 +75,7 @@ export default function App() {
     return (<Signup loadPage={loadPage} loadFeed={switchToFeed} apiUrl={apiUrl}/>);
   }
   else if (page === "feed" && !loading){
-    return (<Feed username={username} password={password} apiUrl={apiUrl}  logoutFun={clearStorage} loadFeed={switchToFeed}/>);
+    return (<Feed username={username} password={password} profilePic={thePic} apiUrl={apiUrl}  logoutFun={clearStorage} loadFeed={switchToFeed}/>);
   }
 
   if (loading){

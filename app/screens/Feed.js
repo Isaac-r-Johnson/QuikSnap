@@ -12,9 +12,10 @@ import Loading from '../components/Loading';
 import Friend from '../components/Friend';
 import Notification from '../components/Notification';
 import Footer from '../components/Footer';
+import BackBtn from '../components/BackBtn';
 
 export default Feed = (props) => {
-  const {username, password, apiUrl, logoutFun, loadFeed} = props;
+  const {username, password, profilePic, apiUrl, logoutFun, loadFeed} = props;
   const [postImage, setPostImage] = useState("");
   const [addPost, setAddPost] = useState(false);
   const [notFilled, setNotFilled] = useState(false);
@@ -31,6 +32,7 @@ export default Feed = (props) => {
   const [notification, setNotification] = useState(false);
   const [viewNotification, setViewNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [accountStatus, setAccountStatus] = useState("main");
 
   useEffect(() => {
     getPosts();
@@ -39,6 +41,7 @@ export default Feed = (props) => {
 
   useEffect(() => {
     if (!showAccount){
+      setSocialSearch("");
       getPosts();
       getNotifications();
       console.log("Feed Update");
@@ -234,31 +237,68 @@ export default Feed = (props) => {
             <Header type={'feed'} notification={notification} notificationFun={() => {setViewNotification(true);}} addPostFun={createPost}/>
       
             <Modal animationType='slide' transparent={false} visible={showAccount}>
-            <View style={styles.mainContainer}>
-              <Header type={'contact'} closeFun={() => setShowAccount(false)}/>
-              
-              <View style={styles.socialContentContainer}>
-                <TextInput style={styles.socialSearch} placeholder='Search Friends' onChangeText={updateSocialSearch} value={socialSearch}/>
-                
-                <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={users} renderItem={user => {
-                  if (user.item.username.toLowerCase().includes(socialSearch.toLowerCase())){
-                    return <Friend an={username} follows={follows} img={user.item.pic} name={user.item.username} unFollowFun={unFollowUser} followFun={followUser}/>
-                  }
-                }}>
-                </FlatList>
-                <View style={{paddingBottom: 20}}></View>
-              </View>
+              <View style={styles.mainContainer}>
+                  {accountStatus === "main" ? (
+                    <Fragment>
+                      <Header type={'contact'} closeFun={() => setShowAccount(false)}/>
+                      <View style={styles.accountScreen}>
 
-              <View style={styles.logoutBtnContainer}>
-                <View></View>
-                <View style={styles.logoutBtn}>
-                  <Pressable onPress={() => {logoutFun(); }} android_ripple={{color: 'black'}}>
-                      <Text style={styles.logoutBtnText}>LOGOUT</Text>
-                  </Pressable>
+                        <View style={styles.accountInfo}>
+                          <Image style={styles.profileImg} source={{uri:profilePic}}/>
+                          <Text style={styles.accountName}>{username}</Text>
+                        </View>
+
+                        <View style={{width: '100%', height: 1, backgroundColor: 'black', marginTop: 10}}></View>
+
+                        <View style={styles.accountBtns}>
+                          <View styles={styles.accountBtn}>
+                            <Pressable style={styles.accountBtn} onPress={() => setAccountStatus("")}>
+                                <Text style={styles.accountBtnText}>Friends</Text>
+                                <Text style={styles.accountBtnText}>{">"}</Text>
+                            </Pressable>
+                          </View>
+                          <View styles={styles.accountBtn}>
+                            <Pressable style={styles.accountBtn}>
+                                <Text style={styles.accountBtnText}>Settings</Text>
+                                <Text style={styles.accountBtnText}>{">"}</Text>
+                            </Pressable>
+                          </View>
+                        </View>
+
+                      </View>
+                    </Fragment>
+                  ):(
+                    <Fragment>
+                      <View style={styles.backBtn}>
+                        <Pressable onPress={() => setAccountStatus('main')}>
+                          <Text style={styles.backBtnArrow}>➜</Text>
+                        </Pressable>
+                      </View>
+                      <View style={styles.socialContentContainer}>
+                        <TextInput style={styles.socialSearch} placeholder='Search Friends' onChangeText={updateSocialSearch} value={socialSearch}/>
+
+                        <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={users} renderItem={user => {
+                          if (user.item.username.toLowerCase().includes(socialSearch.toLowerCase())){
+                            return <Friend an={username} follows={follows} img={user.item.pic} name={user.item.username} unFollowFun={unFollowUser} followFun={followUser}/>
+                          }
+                        }}>
+                        </FlatList>
+                        <View style={{paddingBottom: 20}}></View>
+                      </View>
+                    </Fragment>
+                  )}
+
+
+                <View style={styles.logoutBtnContainer}>
+                  <View></View>
+                  <View style={styles.logoutBtn}>
+                    <Pressable onPress={() => {logoutFun(); }} android_ripple={{color: 'black'}}>
+                        <Text style={styles.logoutBtnText}>LOGOUT</Text>
+                    </Pressable>
+                  </View>
                 </View>
-              </View>
 
-            </View>
+              </View>
             </Modal>
                 
             <Modal animationType='slide' transparent={false} visible={viewNotification}>
@@ -352,7 +392,8 @@ const styles = StyleSheet.create({
     backBtn: {
       width: '95%',
       alignItems: 'flex-start',
-      marginBottom: 5
+      marginLeft: 10,
+      marginTop: 10
     },
     backBtnArrow: {
       transform: [{ rotate: '180deg'}],
@@ -365,6 +406,44 @@ const styles = StyleSheet.create({
       width: '100%',
       backgroundColor: '#004AAD',
     },
+
+    accountScreen: {
+      padding: 20
+    },
+    accountInfo: {
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    profileImg: {
+      width: 60,
+      height: 60,
+      borderRadius: 100
+    },
+    accountName: {
+      fontSize: 35,
+      marginLeft: 8,
+      fontWeight: '600'
+    },
+    accountBtns: {
+
+    },
+    accountBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: "98%",
+      height: 50,
+      paddingHorizontal: 10,
+      marginTop: 20,
+      elevation: 20,
+      borderColor: 'black',
+      backgroundColor: "#004AAD"
+    },
+    accountBtnText: {
+      fontSize: 23,
+      fontWeight: '600'
+    },
+
     socialContentContainer: {
       width: '100%',
       height: '100%',
