@@ -33,8 +33,9 @@ header > h1{
     background: rgb(1,13,43);
     background: linear-gradient(315deg, rgba(1,13,43,1) 14%, rgba(1,60,117,1) 53%, rgba(35,79,255,1) 100%);
     width: 100vw;
-    min-height: 100vh;
     max-height: fit-content;
+    min-height: 100vh;
+    padding-bottom: 200px!important;
     display: grid;
     grid-template-columns: 1.8fr 3fr;
     grid-template-rows: 1fr;
@@ -44,6 +45,9 @@ header > h1{
     padding-top: 40px;
     padding-left: 60px;
     margin-right: 10px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
 }
 .download-text > h1{
     color: white;
@@ -90,26 +94,18 @@ header > h1{
 
 /* Device Example Side */
 .download-device-ex{
-    margin-top: 75px;
+    margin-top: 85px;
     padding-top: 40px;
-    padding-right: 50px;
-    padding-bottom: 100px;
+    padding-right: 60px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
-.ex-tablet{
-    width: 500px;
-    height: 600px;
-    border: 10px solid black;
-    border-radius: 20px;
-}
+
 .ex-phone{
-    top: 275px;
-    right: 390px;
     position: absolute;
-    width: 300px;
-    height: 475px;
+    width: 350px!important;
+    height: 625px!important;
     border: 10px solid black;
     border-radius: 20px;
 }
@@ -120,13 +116,12 @@ header > h1{
 }
 
 @media (min-width: 1400px){
-    .ex-tablet{
-        width: 600px;
-        height: 700px;
+    .download-sec{
+        padding-bottom: 325px!important;
     }
     .ex-phone{
-        width: 400px;
-        height: 575px;
+        width: 400px!important;
+        height: 775px!important;
     }
 }
 @media (min-width: 1700px){
@@ -143,67 +138,35 @@ header > h1{
     .store-download{
         width: 200px;
     }
-    .ex-tablet{
-        width: 700px;
-        height: 800px;
-    }
     .ex-phone{
-        width: 500px;
-        height: 675px;
+        width: 450px!important;
+        height: 800px!important;
     }
 }
 @media (max-width: 1108px){
     .download-sec{
         display: flex;
         flex-direction: column;
-    }
-    .ex-tablet{
-        width: 500px;
-        height: 600px;
-        margin-right: -150px;
+        padding-bottom: 40px!important;
     }
     .download-device-ex{
         align-self: center;
         display: block;
-        padding-bottom: 40px;
+        margin-top: 0px;
     }
     .ex-phone{
-        width: 300px;
-        height: 475px;
+        width: 350px!important;
+        height: 650px!important;
         position: initial;
-        margin-top: -450px;
-        margin-left: -90px;
+        margin-left: 80px;
     }
 }
 @media (max-width: 650px){
-    .download-device-ex{
-        padding-bottom: 80px;
-    }
-    .ex-tablet{
-        width: 400px;
-        height: 500px;
-        margin-right: -150px;
-    }
     .ex-phone{
-        width: 200px;
-        height: 375px;
+        width: 300px!important;
+        height: 550px!important;
         position: initial;
-        margin-top: -360px;
-        margin-left: -90px;
-    }
-}
-@media (max-width: 530px){
-    .download-device-ex{
-        padding-bottom: 175px;
-    }
-    .ex-tablet{
-        width: 350px;
-        height: 450px;
-        margin-right: -150px;
-    }
-    .ex-phone{
-        margin-top: -360px;
-        margin-left: -90px;
+        margin-left: 80px;
     }
 }
 @media (max-width: 475px){
@@ -212,19 +175,10 @@ header > h1{
         padding-top: 40px;
         padding-left: 20px;
     }
-    .download-device-ex{
-        padding-bottom: 175px;
-    }
-    .ex-tablet{
-        width: 250px;
-        height: 350px;
-        margin-right: -105px;
-    }
     .ex-phone{
-        width: 150px;
-        height: 275px;
-        margin-top: -275px;
-        margin-left: -60px;
+        width: 275px!important;
+        height: 500px!important;
+        margin-left: 60px;
     }
 }
 
@@ -363,7 +317,7 @@ header > h1{
     margin-bottom: 125px;
 }
 .ex1{
-    width: 350px;
+    width: 325px;
     height: 575px;
     border: 8px solid black;
     border-radius: 15px;

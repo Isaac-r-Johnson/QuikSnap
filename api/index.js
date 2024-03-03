@@ -150,7 +150,6 @@ app.post('/usrpic', async (req, res) => {
     try {
         const theUser = await User.findOne({username: req.body.username, password: md5(req.body.password)});
         console.log("Send Pic");
-        console.log(theUser.pic);
         res.send(theUser.pic);
    
     } catch (err){
