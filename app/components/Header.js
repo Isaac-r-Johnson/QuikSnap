@@ -11,7 +11,6 @@ export default Header = (props) => {
 
     if (props.type === 'feed'){
         return (
-            <View style={styles.overlay}>
                 <View style={styles.header2}>
                     <View style={styles.left}>
                         <Text style={styles.headerText}>QuikSnap</Text>
@@ -24,12 +23,10 @@ export default Header = (props) => {
                         </View>
                     </View>
                 </View>
-            </View>
         );
     }
     else if (props.type === 'contact'){
         return (
-            <View style={styles.overlaySocial}>
                 <View style={styles.header2}>
                     <View style={styles.left}>
                         <Text style={styles.headerText}>QuikSnap</Text>
@@ -40,50 +37,35 @@ export default Header = (props) => {
                         </Pressable>
                     </View>
                 </View>
-            </View>
         );
     }
     else {
         return (
-            <View style={styles.overlay}>
                 <View style={styles.header1}>
                     <Image style={styles.headerImage} source={require('../assets/logo.png')} />
                     <Text style={styles.headerText}>QuikSnap</Text>
                 </View>
-            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    overlay: {
-        width: '100%',
-        height: 80,
-        justifyContent: 'flex-end',
-        backgroundColor: '#012657',
-    },
-    overlaySocial: {
-        width: '100%',
-        height: 55,
-        justifyContent: 'flex-end',
-        backgroundColor: '#012657',
-    },
     header1: {
         paddingBottom: 5,
         width: '100%',
-        height: 50,
+        height: 70,
         backgroundColor: '#004AAD',
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'flex-start'
     },
     header2: {
         paddingBottom: 5,
         width: '100%',
-        height: 50,
+        height: 70,
         backgroundColor: '#004AAD',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'space-between'
     },
     left: {

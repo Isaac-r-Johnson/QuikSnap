@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Image, Modal, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, Modal, TextInput, Pressable, Switch } from 'react-native';
 import { useState, useEffect, useRef, Fragment } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
@@ -15,7 +15,7 @@ import Footer from '../components/Footer';
 import BackBtn from '../components/BackBtn';
 
 export default Feed = (props) => {
-  const {username, password, profilePic, apiUrl, logoutFun, loadFeed} = props;
+  const {username, password, profilePic, allowNotification, allowPublic, apiUrl, logoutFun, loadFeed} = props;
   const [postImage, setPostImage] = useState("");
   const [addPost, setAddPost] = useState(false);
   const [notFilled, setNotFilled] = useState(false);
@@ -33,6 +33,17 @@ export default Feed = (props) => {
   const [viewNotification, setViewNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [accountStatus, setAccountStatus] = useState("main");
+
+  const [publicToggle, setPublicToggle] = useState(allowPublic);
+  const togglePublic = async () => {
+    setPublicToggle(previousState => !previousState);
+    await axios.post(apiUrl + "changepublic/", {username: username, password: password, public: !publicToggle});
+  }
+  const [notiToggle, setNotiToggle] = useState(allowNotification);
+  const toggleNoti = async () => {
+    setNotiToggle(previousState => !previousState);
+    await axios.post(apiUrl + "changenoti/", {username: username, password: password, noti: !notiToggle});
+  }
 
   useEffect(() => {
     getPosts();
@@ -252,13 +263,13 @@ export default Feed = (props) => {
 
                         <View style={styles.accountBtns}>
                           <View styles={styles.accountBtn}>
-                            <Pressable style={styles.accountBtn} onPress={() => setAccountStatus("")}>
+                            <Pressable style={styles.accountBtn} onPress={() => setAccountStatus("follow")}>
                                 <Text style={styles.accountBtnText}>Friends</Text>
                                 <Text style={styles.accountBtnText}>{">"}</Text>
                             </Pressable>
                           </View>
                           <View styles={styles.accountBtn}>
-                            <Pressable style={styles.accountBtn}>
+                            <Pressable style={styles.accountBtn} onPress={() => setAccountStatus('setting')}>
                                 <Text style={styles.accountBtnText}>Settings</Text>
                                 <Text style={styles.accountBtnText}>{">"}</Text>
                             </Pressable>
@@ -267,7 +278,7 @@ export default Feed = (props) => {
 
                       </View>
                     </Fragment>
-                  ):(
+                  ) : accountStatus === "follow" ? (
                     <Fragment>
                       <View style={styles.backBtn}>
                         <Pressable onPress={() => setAccountStatus('main')}>
@@ -286,6 +297,47 @@ export default Feed = (props) => {
                         <View style={{paddingBottom: 20}}></View>
                       </View>
                     </Fragment>
+                  ): accountStatus === "setting" ? (
+                    <Fragment>
+                        <View style={styles.backBtn}>
+                          <Pressable onPress={() => setAccountStatus('main')}>
+                            <Text style={styles.backBtnArrow}>➜</Text>
+                          </Pressable>
+                        </View>
+                        <View style={styles.socialContentContainer}>
+
+                          <View style={styles.settings}>
+
+                            <View style={styles.setting}>
+                              <Text style={styles.settingText}>Public Profile:</Text>
+                              <Switch
+                                trackColor={{false: '#767577', true: '#012657'}}
+                                thumbColor={publicToggle ? '#f4f3f4' : '#f4f3f4'}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={togglePublic}
+                                value={publicToggle}
+                              />
+                            </View>
+
+                            <View style={styles.setting}>
+                              <Text style={styles.settingText}>Receive Notifications:</Text>
+                              <Switch
+                                trackColor={{false: '#767577', true: '#012657'}}
+                                thumbColor={notiToggle ? '#f4f3f4' : '#f4f3f4'}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={toggleNoti}
+                                value={notiToggle}
+                              />
+                            </View>
+                            
+                          </View>
+
+                        <View style={{paddingBottom: 20}}></View>
+                      </View>
+
+                    </Fragment>
+                  ):(
+                    null
                   )}
 
 
@@ -424,9 +476,6 @@ const styles = StyleSheet.create({
       marginLeft: 8,
       fontWeight: '600'
     },
-    accountBtns: {
-
-    },
     accountBtn: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -460,6 +509,28 @@ const styles = StyleSheet.create({
       borderRadius: 6,
       color: 'black',
       fontSize: 20
+    },
+
+    // Settings:
+    settings: {
+      width: '100%',
+      height: "90",
+    },
+    setting: {
+      width: '100%',
+      height: 30,
+      marginVertical: 10,
+      paddingHorizontal: 20,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+    settingText: {
+      fontSize: 20,
+      fontWeight: '500'
+    },
+    settingToggle: {
+
     },
 
     // Notifications:

@@ -37,6 +37,8 @@ const userSchema = new mongoose.Schema({
     pic: String,
     follows: [String],
     notifications: [{pic: String, text: String}],
+    notification: Boolean,
+    public: Boolean,
     key: String
 });
 const postSchema = new mongoose.Schema({
@@ -150,11 +152,11 @@ app.post('/usrpic', async (req, res) => {
     try {
         const theUser = await User.findOne({username: req.body.username, password: md5(req.body.password)});
         console.log("Send Pic");
-        res.send(theUser.pic);
+        res.send({pic: theUser.pic, noti: theUser.notification, public: theUser.public});
    
     } catch (err){
         console.log("Error while sending pic!");
-        rets.send("ERROR");
+        res.send("ERROR");
     }
 });
 
@@ -269,7 +271,33 @@ app.post('/clear-notifications', async (req, res) => {
         console.log("Notification Error: " + err);
         res.send('ERROR');
     }
-})
+});
+
+app.post('/changepublic', async (req, res) => {
+    try{
+        const username = req.body.username;
+        const password = req.body.password;
+        await User.findOneAndUpdate({username: username, password: md5(password)}, {$set: {public: req.body.public}});
+        res.send("OK");
+        console.log("Public Set");
+    } catch (err){
+        console.log("Public Error: " + err);
+        res.send('ERROR');
+    }
+});
+
+app.post('/changenoti', async (req, res) => {
+    try{
+        const username = req.body.username;
+        const password = req.body.password;
+        await User.findOneAndUpdate({username: username, password: md5(password)}, {$set: {notification: req.body.noti}});
+        res.send("OK");
+        console.log("Notification Set");
+    } catch (err){
+        console.log("Notification Error: " + err);
+        res.send('ERROR');
+    }
+});
 
 // Start
 app.listen(process.env.PORT, () => {
