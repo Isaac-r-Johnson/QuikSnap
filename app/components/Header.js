@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         height: 70,
         backgroundColor: '#004AAD',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'flex-start'
     },
     header2: {

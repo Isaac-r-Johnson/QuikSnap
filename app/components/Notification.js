@@ -8,7 +8,7 @@ export default Notification = (props) => {
         <View style={styles.notificationContainer}>
             <View style={styles.contentContainer}>
                 <Image style={styles.profileImag} source={{uri:img}}/>
-                <Text style={styles.notification}>{notificationText}</Text>
+                <Text numberOfLines={5} style={styles.notification}>{notificationText}</Text>
             </View>
         </View>
     );
@@ -18,11 +18,11 @@ const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     notificationContainer: {
         marginVertical: 4,
+        paddingBottom: 5,
         width: windowWidth-20,
-        height: 50,
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'flex-start',
         borderBottomColor: 'black',
         borderBottomWidth: 2
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     notification: {
-        height: 'fit-content',
+        width: windowWidth-60,
         fontSize: 20,
         fontWeight: '600',
         color: 'black'

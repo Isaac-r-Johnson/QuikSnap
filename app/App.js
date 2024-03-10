@@ -6,7 +6,6 @@ import Feed from './screens/Feed';
 import Start from './screens/Start';
 import Loading from './components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PushNotificationObject } from 'react-native-push-notification';
 import axios from 'axios';
 
 export default function App() {
@@ -17,15 +16,15 @@ export default function App() {
   const [publicPro, setPublic] = useState(null);
   const [thePic, setPic] = useState("");
   const [loading, setLoading] = useState(false);
-  // const apiUrl = "https://quiksnap-api.vercel.app/";
-  const apiUrl = "http://192.168.12.193:5000/";
+  const apiUrl = "https://quiksnap-api.vercel.app/";
+  // const apiUrl = "http://192.168.1.193:5000/";
 
   useEffect(() => {
     console.log("Rendered");
-    // setLoading(true);
-    // setTimeout(() => { 
-    //       setLoading(false); 
-    //   }, 500);
+    setLoading(true);
+    setTimeout(() => { 
+          setLoading(false); 
+      }, 500);
   }, [page]);
 
   useEffect(() => {
@@ -79,7 +78,7 @@ export default function App() {
     return (<Signup loadPage={loadPage} loadFeed={switchToFeed} apiUrl={apiUrl}/>);
   }
   else if (page === "feed" && !loading){
-    return (<Feed username={username} password={password} profilePic={thePic}  allowNotification={notification} allowPublic={publicPro} apiUrl={apiUrl}  logoutFun={clearStorage} loadFeed={switchToFeed}/>);
+    return (<Feed username={username} password={password} profilePic={thePic} allowNotification={notification} allowPublic={publicPro} apiUrl={apiUrl}  logoutFun={clearStorage} loadFeed={switchToFeed}/>);
   }
 
   if (loading){

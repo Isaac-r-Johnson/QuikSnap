@@ -1,7 +1,64 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default Post = (props) => {
-    const {posterUsername, posterPic, location, image, title, des} = props;
+    const {usrn, usrPic, apiUrl, posterUsername, posterPic, location, image, title, des} = props;
+
+    const likeBorder = require('../assets/likeBorder.png');
+    const likeFill = require('../assets/likeFill.png');
+    const disBorder = require('../assets/disBorder.png');
+    const disFill = require('../assets/disFill.png');
+
+    const [likeBtn, setLikeBtn] = useState(likeBorder);
+    const [disBtn, setDisBtn] = useState(disBorder);
+    const [like, setLike] = useState(false);
+    const [dis, setDis] = useState(false);
+
+    useEffect(() => {
+        if (like){
+            setLikeBtn(likeFill);
+        }
+        else if (!like){
+            setLikeBtn(likeBorder);
+        }
+        if (dis){
+            setDisBtn(disFill);
+        }
+        else if (!dis){
+            setDisBtn(disBorder);
+        }
+    }, [like, dis]);
+
+    useEffect(() => {
+        getReactions();
+    }, []);
+
+    const getReactions = async () => {
+        res = await axios.post(apiUrl + 'getreactions/', {picUrl: image});
+        res.data.likes.forEach(like => {
+            if (like.username === usrn){
+                setLike(true);
+                setDis(false);
+            }
+        });
+        res.data.diss.forEach(dis => {
+            if (dis.username === usrn){
+                setLike(false);
+                setDis(true);
+        }
+       });
+    }
+
+    const likePost = async () => {
+        res = await axios.post(apiUrl + 'likepost/', {username: usrn, pic: usrPic, posterName: posterUsername, postTitle: title, postPicUrl: image});
+        console.log(res.data);
+    }
+
+    const disPost = async () => {
+        res = await axios.post(apiUrl + 'dispost/', {username: usrn, pic: usrPic, posterName: posterUsername, postTitle: title, postPicUrl: image});
+        console.log(res.data);
+    }
 
     return (
         <View style={styles.post}>
@@ -19,7 +76,14 @@ export default Post = (props) => {
                 </View>
             </View>
             <Image style={styles.postImage} source={{uri:image}}/>
-
+            <View style={styles.interactButtonsView}>
+                <Pressable  onPress={() => {disPost(); setDis(true); setLike(false)}}>
+                    <Image style={styles.interactButton} source={disBtn}/>
+                </Pressable>
+                <Pressable onPress={() => {likePost(); setLike(true); setDis(false)}}>
+                    <Image style={styles.interactButton} source={likeBtn}/>
+                </Pressable>
+            </View>
         </View>
     );
 }
@@ -27,7 +91,6 @@ export default Post = (props) => {
 const styles = StyleSheet.create({
     post: {
         marginTop: 10,
-        paddingBottom: 15,
         height: 'fit-content',
         width: 375,
         backgroundColor: 'white',
@@ -90,5 +153,16 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 400,
         borderRadius: 10
+    },
+    interactButtonsView: {
+        height: 60,
+        width: "60%",
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    interactButton: {
+        width: 30, 
+        height: 30,
     }
 });

@@ -33,7 +33,7 @@ export default Login = (props) => {
           AsyncStorage.setItem('storedPassword', password);
           const pic = await axios.post(apiUrl + "usrpic/", {username: username, password: password});
           if (pic.data !== "ERROR"){
-            loadFeed(username, password, pic.data);
+            loadFeed(username, password, pic.data.pic);
           }
           else {
             console.log("Error while logging in!");

@@ -268,14 +268,16 @@ export default Feed = (props) => {
                                 <Text style={styles.accountBtnText}>{">"}</Text>
                             </Pressable>
                           </View>
-                          <View styles={styles.accountBtn}>
-                            <Pressable style={styles.accountBtn} onPress={() => setAccountStatus('setting')}>
-                                <Text style={styles.accountBtnText}>Settings</Text>
-                                <Text style={styles.accountBtnText}>{">"}</Text>
-                            </Pressable>
-                          </View>
                         </View>
-
+                        {
+                          // Settings Button - to be active when settings screen is done.
+                          // <View styles={styles.accountBtn}>
+                          //   <Pressable style={styles.accountBtn} onPress={() => setAccountStatus('setting')}>
+                          //       <Text style={styles.accountBtnText}>Settings</Text>
+                          //       <Text style={styles.accountBtnText}>{">"}</Text>
+                          //   </Pressable>
+                          // </View>
+                        }
                       </View>
                     </Fragment>
                   ) : accountStatus === "follow" ? (
@@ -412,7 +414,7 @@ export default Feed = (props) => {
             <View style={styles.feedScreen}>
               {posts !== null ? (
                 <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
-                  return <Post posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
+                  return <Post usrn={username} usrPic={profilePic} apiUrl={apiUrl} posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
                 }}/>
               ):(
                 <Text style={styles.errorText}>No Posts</Text>

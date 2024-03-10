@@ -299,6 +299,82 @@ app.post('/changenoti', async (req, res) => {
     }
 });
 
+app.post('/getreactions', async (req, res) => {
+    const picUrl = req.body.picUrl;
+    thePost = await Post.findOne({pic: picUrl});
+    res.send({likes: thePost.likeCount, diss: thePost.dislikeCount});
+});
+
+app.post('/likepost', async (req, res) => {
+    try{
+        const {username, pic, posterName, postTitle, postPicUrl} = req.body;
+        const posts =  await Post.findOne({pic: postPicUrl});
+        var newDisArray = [];
+        var newLikeArray = [];
+        var inLikeArray = false;
+        await posts.dislikeCount.forEach(count => {
+            if (count.username !== username && count.pic !== pic){
+                newDisArray.push(count);
+            }
+        });
+        await posts.likeCount.forEach( count => {
+            if (count.username === username && count.pic === pic){
+                inLikeArray = true;
+            }
+        });
+        if (!inLikeArray){
+        newLikeArray = posts.likeCount;
+        newLikeArray.push({username: username, pic: pic});
+        }
+        else{
+        newLikeArray = posts.likeCount;
+        }
+        await Post.findOneAndUpdate({pic: postPicUrl}, {$set: {likeCount: newLikeArray, dislikeCount: newDisArray}});
+        await User.findOneAndUpdate({username: posterName}, {$push: {notifications: {pic: pic, text: `${username} liked "${postTitle}"`}}});
+        console.log("Post Liked by", username);
+        res.send('OK');
+    } catch (err){
+        console.log("There was an error liking the post: " + err);
+        res.send("ERROR");
+    }
+
+
+});
+
+app.post('/dispost', async (req, res) => {
+    try{
+        const {username, pic, posterName, postTitle, postPicUrl} = req.body;
+        const posts =  await Post.findOne({pic: postPicUrl});
+        var newDisArray = [];
+        var newLikeArray = [];
+        var inDisArray = false;
+        await posts.likeCount.forEach(count => {
+            if (count.username !== username && count.pic !== pic){
+                newLikeArray.push(count);
+            }
+        });
+        await posts.dislikeCount.forEach( count => {
+            if (count.username === username && count.pic === pic){
+                inDisArray = true;
+            }
+        });
+        if (!inDisArray){
+            newDisArray = posts.dislikeCount;
+            newDisArray.push({username: username, pic: pic});
+        }
+        else{
+            newDisArray = posts.dislikeCount;
+        }
+        await Post.findOneAndUpdate({pic: postPicUrl}, {$set: {likeCount: newLikeArray, dislikeCount: newDisArray}});
+        await User.findOneAndUpdate({username: posterName}, {$push: {notifications: {pic: pic, text: `${username} liked "${postTitle}"`}}});
+        console.log("Post Disliked by", username);
+        res.send('OK');
+    } catch (err){
+        console.log("There was an error disliking the post: " + err);
+        res.send("ERROR");
+    }
+});
+
 // Start
 app.listen(process.env.PORT, () => {
     console.log("QuikSnap server is running on port " + process.env.PORT + "...");
