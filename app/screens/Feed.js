@@ -65,6 +65,11 @@ export default Feed = (props) => {
     }
   }, [showAccount]);
 
+  const getDate = () => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const date = new Date();
+    return months[date.getMonth()] + " " + date.getDate();
+  }
   const getLocation = async () => {
     setLoading(true);
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -130,6 +135,7 @@ export default Feed = (props) => {
         formData.append('username', username);
         formData.append('password', password);
         formData.append('location', location);
+        formData.append("date", getDate());
         try {
           const res = await axios.post(apiUrl + "post/", formData, {
             headers: {
@@ -414,7 +420,7 @@ export default Feed = (props) => {
             <View style={styles.feedScreen}>
               {posts !== null ? (
                 <FlatList style={{width: '100%'}} contentContainerStyle={{alignItems: 'center'}} data={posts} renderItem={post => {
-                  return <Post usrn={username} usrPic={profilePic} apiUrl={apiUrl} posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} image={post.item.pic} title={post.item.title} des={post.item.description}/>
+                  return <Post usrn={username} usrPic={profilePic} apiUrl={apiUrl} posterUsername={post.item.poster.username} posterPic={post.item.poster.pic} location={post.item.location} date={post.item.date} image={post.item.pic} title={post.item.title} des={post.item.description}/>
                 }}/>
               ):(
                 <Text style={styles.errorText}>No Posts</Text>

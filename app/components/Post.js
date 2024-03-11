@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default Post = (props) => {
-    const {usrn, usrPic, apiUrl, posterUsername, posterPic, location, image, title, des} = props;
+    const {usrn, usrPic, apiUrl, posterUsername, posterPic, location, date, image, title, des} = props;
 
     const likeBorder = require('../assets/likeBorder.png');
     const likeFill = require('../assets/likeFill.png');
@@ -66,7 +66,7 @@ export default Post = (props) => {
                 <Image style={styles.profilePicImage} source={{uri:posterPic}}/>
                 <View style={styles.profileTextView}>
                     <Text style={styles.profileTextName}>{posterUsername}</Text>
-                    <Text style={styles.profileTextLocation}>{location}</Text>
+                    <Text style={styles.profileTextLocation}>{date} @ {location}</Text>
                 </View>
             </View>
             <View style={styles.postText}>

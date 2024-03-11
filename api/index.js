@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema({
     poster: {username: String, pic: String},
     location: String,
+    date: String,
     title: String,
     description: String,
     pic: String,
@@ -163,12 +164,13 @@ app.post('/usrpic', async (req, res) => {
 app.post('/post', upload.single('postImage'), async (req, res) => {
     try {
         const picUrl = await uploadImage(req.file.buffer);
-        const {postTitle, postDes, username, password, location} = req.body;
+        const {postTitle, postDes, username, password, location, date} = req.body;
         const key = crypto.randomBytes(20).toString('base64');
         const user = await User.findOne({username: username, password: md5(password)});
         Post.insertMany([{
             poster: {username: user.username, pic: user.pic},
             location: location,
+            date: date,
             title: postTitle,
             description: postDes,
             pic: picUrl,
